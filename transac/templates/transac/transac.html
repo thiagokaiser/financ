@@ -1,0 +1,111 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Inbox
+        <small>Mensagens</small>
+    </h1>                    
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Your Page Content Here -->                    
+    <div class="box box-default">            
+        <div class="box-body">             
+            <a class="btn btn-default" href="{% url 'transac:transacao_add' %}"><span class="fa fa-plus-circle"></span></a>
+
+            <p></p>
+
+            <a class="btn btn-default" href="{% url 'transac:transacoes' %}?year={{ mes.anterior|date:"Y"  }}&month={{ mes.anterior|date:"m" }}"><span class="fa fa-chevron-circle-left"></span></a>                        
+            <a class="btn btn-default btn-mes" data-toggle="modal" data-target="#div-btn-mes">{{ mes.atual|date:"F, Y" }}</a>                    
+            <a class="btn btn-default" href="{% url 'transac:transacoes' %}?year={{ mes.proximo|date:"Y"  }}&month={{ mes.proximo|date:"m" }}"><span class="fa fa-chevron-circle-right"></span></a>                            
+            
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-mes">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Selecione um periodo:</h4>
+                        </div>
+                        <div class="modal-body">
+                            <select class="mes selectpicker show-tick" data-size="8" data-width="fit">
+                                <option value="01">Janeiro</option>
+                                <option value="02">Fevereiro</option>
+                                <option value="03">Março</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Maio</option>
+                                <option value="06">Junho</option>
+                                <option value="07">Julho</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
+                            </select>
+                            
+                            <select class="ano selectpicker show-tick" data-size="8" data-width="fit">
+                                <option value="2007">2007</option>
+                                <option value="2008">2008</option>
+                                <option value="2009">2009</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                            </select>                                    
+                            <a class="btn btn-default btn-mes-ok"><span class="fa fa-check"></span></a>                        
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+            
+            <p></p>
+            
+            <div class="table-responsive">
+                <table class="table table-hover table-selectable" style="max-width:300px">                    
+                    {% for trans in transacoes %}                    
+                    <tr {% if trans.pago == False %} style="color:red"{% endif %} id="{{ trans.pk }}">
+                        <td class="colunatable"> {{ trans.descricao }}</td>
+                        <td class="colunatable">{{ trans.dt_vencimento|date:"j/b/Y" }}</td>                        
+                        <td class="colunatable"> {{ trans.valor }}</td>
+                        <td class="colunatable"> {{ trans.pago }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>            
+        </div>
+    </div>
+
+</section><!-- /.content -->	
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">        
+
+    $(".colunatable").click(function(e) {
+        chave = $(this).closest("tr").attr("id")
+        window.location.href = "view/" + chave + "/";
+    });        
+    $(".btn-mes-ok").click(function(e) {                
+        v_ano = $('.ano').selectpicker('val')
+        v_mes = $('.mes').selectpicker('val')        
+        window.location.href = "{% url 'transac:transacoes' %}?year=" + v_ano + "&month=" + v_mes;
+    });        
+    $('.mes').val('{{ mes.atual|date:"m" }}'); 
+    $('.ano').val('{{ mes.atual|date:"Y" }}');      
+
+</script>
+{% endblock javascript %}

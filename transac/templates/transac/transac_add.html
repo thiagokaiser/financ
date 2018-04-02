@@ -1,0 +1,39 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Inbox
+        <small>Mensagens</small>
+    </h1>                    
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Your Page Content Here -->                    
+    <div class="box box-default">            
+        <div class="box-body">             
+            <form method="POST">
+                <table class="table">  {% csrf_token %}
+                    {{ form.as_table }}                    
+                </table>
+                <button class="btn btn-default" type="submit">Salvar</button>
+                <a class="btn btn-default" href="{% url 'transac:transacoes' %}">Cancelar</a>
+            </form>            
+        </div>
+    </div>
+
+</section><!-- /.content -->	
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">        
+
+    
+
+</script>
+{% endblock javascript %}

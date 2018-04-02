@@ -1,0 +1,30 @@
+.errorlist{
+	color:red;
+	font-size:14px;	
+}
+.helptext{
+	font-size: 12px;
+	color:gray;
+}
+
+.table-selectable > tbody > tr,
+.table-selectable-multiple > tbody > tr {
+  cursor: pointer;
+}
+.table-selectable > tbody > tr.selected,
+.table-selectable-multiple > tbody > tr.selected {
+  background-color: #d9edf7;
+  color: #31708f;
+}
+@media screen and (min-width: 768px) {
+  .table-selectable-multiple > tbody > tr.selected:hover {
+    background-color: #c4e3f3;
+  }
+  .table-selectable-multiple > tbody > tr:hover {
+    background-color: #d9edf7;
+  }
+
+  .checkboxinbox:hover {
+    background-color: #87CEEB;
+  }
+}
