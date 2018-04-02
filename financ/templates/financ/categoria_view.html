@@ -16,8 +16,8 @@
     <div class="box box-default">            
         <div class="box-body">             
             
-            <a class="btn btn-default" href="{% url 'transac:tag_list' %}">Voltar</a>
-            <a class="btn btn-default" href="{% url 'transac:tag_edit' pk=tag.pk %}">Editar</a>
+            <a class="btn btn-default" href="{% url 'financ:categoria_list' %}">Voltar</a>
+            <a class="btn btn-default" href="{% url 'financ:categoria_edit' pk=categoria.pk %}">Editar</a>
             <a id="bt-del" class="btn btn-default" 
                data-toggle="confirmation" data-placement="bottom"
                data-btn-ok-label="Confirmar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
@@ -26,8 +26,8 @@
                data-btn-cancel-class="btn-danger"
                data-title="Tem certeza?" data-content="A mensagem será excluida permanentemente.">Deletar </a>
             <p></p>            
-            <p><b>Descrição: </b>{{ tag.descricao }}</p>
-            <p><b>Cor: </b>{{ tag.cor }}</p>
+            <p><b>Descrição: </b>{{ categoria.descricao }}</p>
+            <p><b>Cor: </b>{{ categoria.cor }}</p>
                     
                 
             
@@ -45,14 +45,14 @@
     $('#bt-del').confirmation({
         rootSelector: '[data-toggle=confirmation]',
         onConfirm: function () {
-            var tag_list = [];        
-            tag_list.push({{ tag.pk }});
+            var categoria_list = [];        
+            categoria_list.push({{ categoria.pk }});
             $.ajax({
-                url:"{% url 'transac:tag_del' %}",
+                url:"{% url 'financ:categoria_del' %}",
                 type: "POST",            
-                data: {tag_lista: tag_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                data: {categoria_lista: categoria_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
                 success:function(response){
-                window.location.href= "{% url 'transac:tag_list' %}"
+                window.location.href= "{% url 'financ:categoria_list' %}"
                 },
                 complete:function(){},
                 error:function (xhr, textStatus, thrownError){}

@@ -5,8 +5,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Inbox
-        <small>Mensagens</small>
+        Despesas
+        <small>Lista</small>
     </h1>                    
 </section>
 
@@ -15,13 +15,13 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
-            <a class="btn btn-default" href="{% url 'transac:transacao_add' %}"><span class="fa fa-plus-circle"></span></a>
+            <a class="btn btn-default" href="{% url 'financ:despesa_add' %}"><span class="fa fa-plus-circle"></span></a>
 
             <p></p>
 
-            <a class="btn btn-default" href="{% url 'transac:transacoes' %}?year={{ mes.anterior|date:"Y"  }}&month={{ mes.anterior|date:"m" }}"><span class="fa fa-chevron-circle-left"></span></a>                        
+            <a class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ mes.anterior|date:"Y"  }}&month={{ mes.anterior|date:"m" }}"><span class="fa fa-chevron-circle-left"></span></a>                        
             <a class="btn btn-default btn-mes" data-toggle="modal" data-target="#div-btn-mes">{{ mes.atual|date:"F, Y" }}</a>                    
-            <a class="btn btn-default" href="{% url 'transac:transacoes' %}?year={{ mes.proximo|date:"Y"  }}&month={{ mes.proximo|date:"m" }}"><span class="fa fa-chevron-circle-right"></span></a>                            
+            <a class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ mes.proximo|date:"Y"  }}&month={{ mes.proximo|date:"m" }}"><span class="fa fa-chevron-circle-right"></span></a>                            
             
             <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-mes">
                 <div class="modal-dialog" role="document">
@@ -74,12 +74,12 @@
             
             <div class="table-responsive">
                 <table class="table table-hover table-selectable" style="max-width:300px">                    
-                    {% for trans in transacoes %}                    
-                    <tr {% if trans.pago == False %} style="color:red"{% endif %} id="{{ trans.pk }}">
-                        <td class="colunatable"> {{ trans.descricao }}</td>
-                        <td class="colunatable">{{ trans.dt_vencimento|date:"j/b/Y" }}</td>                        
-                        <td class="colunatable"> {{ trans.valor }}</td>
-                        <td class="colunatable"> {{ trans.pago }}</td>
+                    {% for despesa in despesas %}                    
+                    <tr {% if despesa.pago == False %} style="color:red"{% endif %} id="{{ despesa.pk }}">
+                        <td class="colunatable"> {{ despesa.descricao }}</td>
+                        <td class="colunatable">{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
+                        <td class="colunatable"> {{ despesa.valor }}</td>
+                        <td class="colunatable"> {{ despesa.pago }}</td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -102,7 +102,7 @@
     $(".btn-mes-ok").click(function(e) {                
         v_ano = $('.ano').selectpicker('val')
         v_mes = $('.mes').selectpicker('val')        
-        window.location.href = "{% url 'transac:transacoes' %}?year=" + v_ano + "&month=" + v_mes;
+        window.location.href = "{% url 'financ:despesas' %}?year=" + v_ano + "&month=" + v_mes;
     });        
     $('.mes').val('{{ mes.atual|date:"m" }}'); 
     $('.ano').val('{{ mes.atual|date:"Y" }}');      

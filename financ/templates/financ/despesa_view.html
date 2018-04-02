@@ -16,10 +16,10 @@
     <div class="box box-default">            
         <div class="box-body">             
             
-            <a class="btn btn-default" href="{% url 'transac:transacoes' %}?year={{ transacao.dt_vencimento|date:"Y"  }}&month={{ transacao.dt_vencimento|date:"m" }}">Voltar</a>
-            <a class="btn btn-default" href="{% url 'transac:transacao_edit' pk=transacao.pk %}">Editar</a>
-            <p>{{ transacao.descricao }}</p>
-            <p>{{ transacao.valor }}</p>
+            <a class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Voltar</a>
+            <a class="btn btn-default" href="{% url 'financ:despesa_edit' pk=despesa.pk %}">Editar</a>
+            <p>{{ despesa.descricao }}</p>
+            <p>{{ despesa.valor }}</p>
                     
                 
             

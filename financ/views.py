@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import (
-	Transacao,
-	Tag,
+	Despesa,
+	Categoria,
 	)
 from .forms import (
-	TransacaoFormView,
-	TagFormView,
+	DespesaFormView,
+	CategoriaFormView,
 	)
 from django.utils import timezone
 from django.contrib import messages
@@ -13,7 +13,7 @@ import datetime
 import calendar
 
 # Create your views here.
-def Transacoes(request):
+def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
 	current = datetime.datetime(p_ano, p_mes, 1)
@@ -32,113 +32,113 @@ def Transacoes(request):
 	mes['proximo']  	= next_month
 	mes['anterior'] 	= prev_month	
 
-	transacoes = Transacao.objects.filter(dt_vencimento__year=current.year,
+	despesas = Despesa.objects.filter(dt_vencimento__year=current.year,
                                           dt_vencimento__month=current.month)
 
 	args = {'mes': mes,
-	 		'transacoes': transacoes}
+	 		'despesas': despesas}
 
-	return render(request, 'transac/transac.html', args)
+	return render(request, 'financ/despesas.html', args)
 
-def Transacao_Add(request):
+def Despesa_Add(request):
 	if request.method == 'POST':
-		form = TransacaoFormView(request.POST)
+		form = DespesaFormView(request.POST)
 		if form.is_valid():  
-			transacao = form.save(commit=False)           	
-			url = '?year=' + str(transacao.dt_vencimento.year) + '&month=' + str(transacao.dt_vencimento.month)
-			transacao.save()            
+			despesa = form.save(commit=False)           	
+			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
+			despesa.save()            
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
-			response = redirect('transac:transacoes')
+			response = redirect('financ:despesas')
 
 			response['Location'] += url
 			return response
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
-		form = TransacaoFormView()
+		form = DespesaFormView()
 
 	args = {'form': form}
 
-	return render(request, 'transac/transac_add.html', args)
+	return render(request, 'financ/despesa_add.html', args)
 
-def Transacao_View(request,pk):
-    transacao = get_object_or_404(Transacao, pk=pk)
+def Despesa_View(request,pk):
+    despesa = get_object_or_404(Despesa, pk=pk)
     
-    args = {'transacao': transacao}
+    args = {'despesa': despesa}
 
-    return render(request, 'transac/transac_view.html', args)
+    return render(request, 'financ/despesa_view.html', args)
 
-def Transacao_Edit(request,pk):
-	transacao = get_object_or_404(Transacao, pk=pk)
+def Despesa_Edit(request,pk):
+	despesa = get_object_or_404(Despesa, pk=pk)
 	if request.method == 'POST':
-		form = TransacaoFormView(request.POST, instance=transacao)        
+		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
-			transacao = form.save(commit=False)           	
-			url = '?year=' + str(transacao.dt_vencimento.year) + '&month=' + str(transacao.dt_vencimento.month)
-			transacao.save()            
+			despesa = form.save(commit=False)           	
+			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
+			despesa.save()            
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
-			response = redirect('transac:transacoes')
+			response = redirect('financ:despesas')
 
 			response['Location'] += url
 			return response
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
-		form = TransacaoFormView(instance=transacao)        
+		form = DespesaFormView(instance=despesa)        
 
 	args = {'form': form}    
 
-	return render(request, 'transac/transac_edit.html', args)
+	return render(request, 'financ/despesa_edit.html', args)
 
-def Tag_Add(request):
+def Categoria_Add(request):
 	if request.method == 'POST':
-		form = TagFormView(request.POST)
+		form = CategoriaFormView(request.POST)
 		if form.is_valid():
 			form.save()
-			return redirect('transac:tag_list')
+			return redirect('financ:categoria_list')
 	else:
-		form = TagFormView()
+		form = CategoriaFormView()
 
 	args = {'form': form}
 
-	return render(request, 'transac/tag_add.html', args)
+	return render(request, 'financ/categoria_add.html', args)
 
-def Tag_List(request):	
-	tags = Tag.objects.all()
-	args = {'tags': tags}
-	return render(request, 'transac/tag_list.html', args)
+def Categoria_List(request):	
+	categorias = Categoria.objects.all()
+	args = {'categorias': categorias}
+	return render(request, 'financ/categoria_list.html', args)
 
-def Tag_View(request, pk):
-	tag = get_object_or_404(Tag, pk=pk)
+def Categoria_View(request, pk):
+	categoria = get_object_or_404(Categoria, pk=pk)
 
-	args = {'tag': tag}
-	return render(request, 'transac/tag_view.html', args)
+	args = {'categoria': categoria}
+	return render(request, 'financ/categoria_view.html', args)
 
-def Tag_Edit(request, pk):
-	tag = get_object_or_404(Tag, pk=pk)
+def Categoria_Edit(request, pk):
+	categoria = get_object_or_404(Categoria, pk=pk)
 	if request.method == 'POST':
-		form = TagFormView(request.POST, instance=tag)        
+		form = CategoriaFormView(request.POST, instance=categoria)        
 		if form.is_valid():  			
 			form.save()            
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			
-			return redirect('transac:tag_list')
+			return redirect('financ:categoria_list')
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
-		form = TagFormView(instance=tag)        
+		form = CategoriaFormView(instance=categoria)        
 
 	args = {'form': form}    
 
-	return render(request, 'transac/transac_edit.html', args)
+	return render(request, 'financ/despesa_edit.html', args)
 
-def Tag_Del(request):
+def Categoria_Del(request):
     if request.POST and request.is_ajax():        
-        if request.POST.getlist('tag_lista[]'):
-            tag_list = request.POST.getlist('tag_lista[]')            
-            for i in tag_list:
-                tag = Tag.objects.get(pk=i)
-                tag.delete()            
+        if request.POST.getlist('categoria_lista[]'):
+            categoria_list = request.POST.getlist('categoria_lista[]')            
+            for i in categoria_list:
+                categoria = Categoria.objects.get(pk=i)
+                categoria.delete()            
             messages.success(request, "Mensagens excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
         else:
             messages.error(request, "Nenhuma mensagem selecionada.", extra_tags='alert-error alert-dismissible')               

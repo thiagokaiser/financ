@@ -1,23 +1,23 @@
 from django import forms
 from django.forms.widgets import TextInput
-from .models import Transacao, Tag
+from .models import Despesa, Categoria
 
-class TransacaoFormView(forms.ModelForm):    
+class DespesaFormView(forms.ModelForm):    
     class Meta:
-        model = Transacao
+        model = Despesa
         fields = ('valor',
 				  'descricao',	
 				  'dt_vencimento',
-				  'tag',			
+				  'categoria',			
 				  'pago',		
         		)
         widgets = {
             'dt_vencimento': TextInput(attrs={'type': 'date'}),
         }
 
-class TagFormView(forms.ModelForm):
+class CategoriaFormView(forms.ModelForm):
     class Meta:
-        model = Tag
+        model = Categoria
         fields = ('descricao',	
 				  'cor',
         		)

@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['kaiserz.pythonanywhere.com',
 
 INSTALLED_APPS = [
     'app.apps.AppConfig',
-    'transac.apps.TransacConfig',
+    'financ.apps.FinancConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

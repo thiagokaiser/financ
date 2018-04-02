@@ -15,16 +15,16 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
-            <a class="btn btn-default" href="{% url 'transac:tag_add' %}"><span class="fa fa-plus-circle"></span></a>
+            <a class="btn btn-default" href="{% url 'financ:categoria_add' %}"><span class="fa fa-plus-circle"></span></a>
 
             <p></p>
             {{ request.session.teste }}        
             <div class="table-responsive">
                 <table class="table table-hover table-selectable" style="max-width:300px">                    
-                    {% for tag in tags %}                    
-                    <tr id="{{ tag.pk }}">
-                        <td class="colunatable"> {{ tag.descricao }}</td>
-                        <td class="colunatable"><input type="color" disabled value="{{ tag.cor }}"></input></td>                                                
+                    {% for categoria in categorias %}                    
+                    <tr id="{{ categoria.pk }}">
+                        <td class="colunatable"> {{ categoria.descricao }}</td>
+                        <td class="colunatable"><input type="color" disabled value="{{ categoria.cor }}"></input></td>                                                
                     </tr>
                     {% endfor %}
                 </table>
@@ -42,7 +42,7 @@
 
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
-        window.location.href = "/transac/tag_view/" + chave + "/";
+        window.location.href = "/financ/categoria_view/" + chave + "/";
     });
 
 </script>

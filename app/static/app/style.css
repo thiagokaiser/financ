@@ -28,3 +28,9 @@
     background-color: #87CEEB;
   }
 }
+.form_repetir{
+  display: none;
+}
+.form_periodo{
+  display: none;
+}
