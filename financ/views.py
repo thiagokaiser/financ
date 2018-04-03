@@ -9,8 +9,10 @@ from .forms import (
 	)
 from django.utils import timezone
 from django.contrib import messages
+from django.core import serializers
 import datetime
 import calendar
+import json
 
 # Create your views here.
 def Despesas(request):
@@ -57,7 +59,7 @@ def Despesa_Add(request):
 	else:
 		form = DespesaFormView()
 
-	args = {'form': form}
+	args = {'form': form, 'form_categ': CategoriaFormView()}
 
 	return render(request, 'financ/despesa_add.html', args)
 
@@ -91,17 +93,30 @@ def Despesa_Edit(request,pk):
 	return render(request, 'financ/despesa_edit.html', args)
 
 def Categoria_Add(request):
-	if request.method == 'POST':
-		form = CategoriaFormView(request.POST)
-		if form.is_valid():
-			form.save()
-			return redirect('financ:categoria_list')
-	else:
-		form = CategoriaFormView()
+	if request.is_ajax():
+		if request.method == 'POST':
+			form = CategoriaFormView(request.POST)
+			if form.is_valid():
+				salvar = form.save()			
+				retorno_dict = {'chave': salvar.pk, 'descricao': salvar.descricao}				
+			else:
+				retorno_dict = {'chave': 'erro', 'descricao': str(form.errors)}
 
-	args = {'form': form}
+			retorno = json.dumps(retorno_dict)
+			return HttpResponse(retorno)
+		
+	else:	
+		if request.method == 'POST':
+			form = CategoriaFormView(request.POST)
+			if form.is_valid():
+				form.save()
+				return redirect('financ:categoria_list')
+		else:
+			form = CategoriaFormView()
 
-	return render(request, 'financ/categoria_add.html', args)
+		args = {'form': form}
+
+		return render(request, 'financ/categoria_add.html', args)
 
 def Categoria_List(request):	
 	categorias = Categoria.objects.all()

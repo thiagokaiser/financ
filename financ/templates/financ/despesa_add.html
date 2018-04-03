@@ -40,6 +40,32 @@
                 <button class="btn btn-default" type="submit">Salvar</button>
                 <a class="btn btn-default" href="{% url 'financ:despesas' %}">Cancelar</a>
             </form>            
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-add-categ">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Adiciona Categoria:</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <form method="POST" id="form_categ">
+                                <table class="table">  {% csrf_token %}
+                                    {{ form_categ.as_table }}                    
+                                </table>
+                                <a class="btn btn-default" id="salva_categ" >Salvar</a>
+                                <a class="btn btn-default" data-toggle="modal" data-target="#div-add-categ" data-backdrop="static">Cancelar</a>
+                                <p></p>
+                                <div id="categ_retorno" style="color:red; font-size: 12px; font-family: serif;">
+                                </div>
+                            </form>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -51,13 +77,28 @@
 
 <script type="text/javascript">        
 
+    $(document).ready(function(){
+        item = "Adicionar categoria";
+
+        $("#id_categoria").prepend('<option value="add-categ">' + item + '</option>');
+        $('#id_categoria').selectpicker({          
+          size: 5,
+          //showTick: true,
+        });
+
+    });
+
     $("#id_repetir").click(function(e){      
         if ($( "#id_repetir" ).is(':checked')){
-            $(".form_repetir").show();           
+            $(".form_repetir").show();                       
         }
         else{
             $(".form_repetir").hide();
-            $(".form_periodo").hide();            
+            $(".form_periodo").hide();
+            $("#id_fixo").prop( "checked", false );
+            $("#id_periodo").prop( "checked", false );   
+            $("#id_meses").val('0');
+
         }        
     });
     $("#id_periodo").click(function(e){      
@@ -73,8 +114,50 @@
         if ($( "#id_periodo" ).is(':checked')){            
             $(".form_periodo").hide();
             $("#id_periodo").prop( "checked", false );
-        }        
+            $("#id_meses").val('0');
+        }                
     });
+    $("#id_categoria").change(function(){
+        if ($("#id_categoria").val() == "add-categ"){            
+            $('#div-add-categ').modal("show");
+        };         
+    });
+    
+    $("#salva_categ").click(function(e){ 
+        $.ajax({
+            url:"{% url 'financ:categoria_add' %}",
+            type: "POST",            
+            data: $("#form_categ").serialize(),            
+            success:function(response){                    
+                var json = $.parseJSON(response);
+                if(json.chave == "erro"){                    
+                    $("#categ_retorno").html(json.descricao);
+                }
+                else{                    
+                    $("#categ_retorno").html('');                    
+                    $("#id_categoria").append('<option value="' + json.chave + '">' + json.descricao + '</option>');                    
+                    
+                    
+                    $('#id_categoria').selectpicker('refresh');
+                    $('#id_categoria').selectpicker('val', json.chave);
+                    $('#div-add-categ').modal("toggle");
+
+                }                
+            },
+            complete:function(){},
+            error:function (xhr, textStatus, thrownError){
+                $("#categ_retorno").append("<h2>Erro</h2>");
+            }
+        });
+    });
+    $('#div-add-categ').on('hidden.bs.modal', function () {
+        if($('#id_categoria').val() == 'add-categ'){
+            $("#categ_retorno").html('');
+            $('#id_categoria').selectpicker('val', '');
+        }        
+    })
+
+
 
 </script>
 {% endblock javascript %}
