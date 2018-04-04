@@ -136,12 +136,9 @@
                 else{                    
                     $("#categ_retorno").html('');                    
                     $("#id_categoria").append('<option value="' + json.chave + '">' + json.descricao + '</option>');                    
-                    
-                    
                     $('#id_categoria').selectpicker('refresh');
                     $('#id_categoria').selectpicker('val', json.chave);
                     $('#div-add-categ').modal("toggle");
-
                 }                
             },
             complete:function(){},

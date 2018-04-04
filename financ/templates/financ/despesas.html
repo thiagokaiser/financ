@@ -68,21 +68,33 @@
                         </div>                        
                     </div>
                 </div>
-            </div>
+            </div>            
             
-            <p></p>
-            
+
             <div class="table-responsive">
-                <table class="table table-hover table-selectable" style="max-width:300px">                    
-                    {% for despesa in despesas %}                    
-                    <tr {% if despesa.pago == False %} style="color:red"{% endif %} id="{{ despesa.pk }}">
-                        <td class="colunatable"> {{ despesa.descricao }}</td>
-                        <td class="colunatable">{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
-                        <td class="colunatable"> {{ despesa.valor }}</td>
-                        <td class="colunatable"> {{ despesa.pago }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                <div style="max-width:900px;">
+                    <table class="table table-bordered" id="table_despesa">                    
+                        <thead>
+                            <th></th>
+                            <th>Despesa</th>
+                            <th>Categoria</th>
+                            <th>Vencimento</th>
+                            <th>Valor</th>                    
+                        </thead>
+                        <tbody>
+                            {% for despesa in despesas %}                                        
+                            <tr id="{{ despesa.pk }}" >
+                                <td data-order="{{ despesa.pago }}"><i class="fa fa-circle" {% if despesa.pago == False %} style="color:red" {% else %} style="color:#41db53"{% endif %}></i></td>
+                                <td class="colunatable"> {{ despesa.descricao }}</td>                        
+                                <td class="colunatable"><i class="fa fa-circle" style="color: {{ despesa.categoria.cor }}"></i> {{ despesa.categoria.descricao }}</td>
+                                <td class="colunatable"><span style="display: none;">{{ despesa.dt_vencimento|date:"Ymd" }}</span>{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
+                                <td class="colunatable" data-order="{% load l10n %}{{ despesa.valor|unlocalize }}">{{ despesa.valor }}</td>                                                
+                            </tr>                
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
             </div>            
         </div>
     </div>
@@ -93,7 +105,23 @@
 
 {% block javascript %}
 
-<script type="text/javascript">        
+{% load static %}
+<script type="text/javascript" src="{% static 'app/plugins/datatables/jquery.dataTables.min.js'  %}"></script>
+<script type="text/javascript" src="{% static 'app/plugins/datatables/dataTables.bootstrap.min.js'  %}"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){                
+        $('#table_despesa').DataTable({
+          "paging": false,
+          "lengthChange": false,
+          "searching": true,
+          "ordering": true,
+          "info": false,
+          "autoWidth": false,  
+          "dom": '<"top"i>rt<"bottom"flp><"clear">'
+        });
+    });
 
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
