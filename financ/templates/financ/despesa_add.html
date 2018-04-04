@@ -16,7 +16,7 @@
     <div class="box box-default">            
         <div class="box-body">             
             <form method="POST">
-                <table class="table">  {% csrf_token %}
+                <table class="table" style="max-width:500px;">  {% csrf_token %}
                     {{ form.as_table }}                    
                 </table>     
 
@@ -83,6 +83,7 @@
         $("#id_categoria").prepend('<option value="add-categ">' + item + '</option>');
         $('#id_categoria').selectpicker({          
           size: 5,
+          width: 'fit',
           //showTick: true,
         });
 

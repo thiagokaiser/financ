@@ -64,7 +64,7 @@ def Despesa_Add(request):
 	return render(request, 'financ/despesa_add.html', args)
 
 def Despesa_View(request,pk):
-    despesa = get_object_or_404(Despesa, pk=pk)
+    despesa = get_object_or_404(Despesa, pk=pk)    
     
     args = {'despesa': despesa}
 
@@ -145,7 +145,7 @@ def Categoria_Edit(request, pk):
 
 	args = {'form': form}    
 
-	return render(request, 'financ/despesa_edit.html', args)
+	return render(request, 'financ/categoria_edit.html', args)
 
 def Categoria_Del(request):
     if request.POST and request.is_ajax():        

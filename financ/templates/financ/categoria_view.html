@@ -24,12 +24,21 @@
                data-btn-ok-class="btn-success"
                data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
                data-btn-cancel-class="btn-danger"
-               data-title="Tem certeza?" data-content="A mensagem será excluida permanentemente.">Deletar </a>
-            <p></p>            
-            <p><b>Descrição: </b>{{ categoria.descricao }}</p>
-            <p><b>Cor: </b>{{ categoria.cor }}</p>
-                    
-                
+               data-title="Tem certeza?" data-content="A categoria será excluida permanentemente.">Deletar </a>
+            <p></p>       
+            <table class="table" style="max-width:300px;">  {% csrf_token %}
+                <tr>
+                    <th>Descrição</th>
+                    <td>{{ categoria.descricao }}</td>
+                </tr>
+                <tr>
+                    <th>Cor</th>
+                    <td>{{ categoria.cor }}</td>
+                </tr>
+            </table>
+
+
+            </table>                    
             
         </div>
     </div>

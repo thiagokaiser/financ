@@ -16,11 +16,11 @@
     <div class="box box-default">            
         <div class="box-body">                 
             <form method="POST">
-                <table class="table">  {% csrf_token %}
+                <table class="table" style="max-width:300px;">  {% csrf_token %}
                     {{ form.as_table }}                    
                 </table>
                 <button class="btn btn-default" type="submit">Salvar</button>
-                <a class="btn btn-default" href="{% url 'transac:tag_list' %}">Cancelar</a>
+                <a class="btn btn-default" href="{% url 'financ:categoria_list' %}">Cancelar</a>
             </form>
         </div>
     </div>

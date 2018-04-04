@@ -16,7 +16,7 @@
 
     <div class="box box-primary">            
         <div class="box-body">           
-            <form method="POST">            {% csrf_token %}
+            <form method="POST"> {% csrf_token %}
                 <table class="table table-hover">
                     <tr><td></td><td><input class="check-todos" type="checkbox" name="todos"> Todos </input></td></tr>
                     {{ form.as_table }}
@@ -35,14 +35,15 @@
 
 <script type="text/javascript">    
     jQuery(document).ready(function(){                
-        $("#id_destinatario").multiselect({
-            enableFiltering: true,
-            maxHeight: 400,
+        $("#id_destinatario").selectpicker({
+            size: 5,
+            width: 'fit',
+            liveSearch: true,
         });                    
     });
     $(".check-todos").click(function(e){        
         $("#id_destinatario").val({{ request.user.id }});
-        $("#id_destinatario").multiselect("refresh");           
+        $("#id_destinatario").selectpicker("refresh");           
         if($("#id_destinatario").closest('tr').css("display")!="none"){
             $("#id_destinatario").closest('tr').attr("style", "display:none");
         }
