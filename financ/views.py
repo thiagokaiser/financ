@@ -14,6 +14,8 @@ import datetime
 import calendar
 import json
 
+#import pdb; pdb.set_trace()
+
 # Create your views here.
 def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
@@ -30,25 +32,36 @@ def Despesas(request):
 		next_month = datetime.datetime(current.year, (current.month + 1), 1)
 		prev_month = datetime.datetime(current.year, (current.month - 1), 1)
 	mes = dict()
-	mes['atual']        = current	
+	mes['atual']        = current
 	mes['proximo']  	= next_month
-	mes['anterior'] 	= prev_month	
+	mes['anterior'] 	= prev_month
 
 	despesas = Despesa.objects.filter(dt_vencimento__year=current.year,
-                                          dt_vencimento__month=current.month)
+                                      dt_vencimento__month=current.month).exclude(fixa=True)
+
+	despesas_fixa = Despesa.objects.filter(fixa=True)
+	for despesa in despesas_fixa:				
+		despesa.dt_vencimento = datetime.datetime(current.year, current.month, despesa.dt_vencimento.day)		
+	for despesa in despesas:		
+		despesas_fixa = despesas_fixa.exclude(pk=despesa.pk_fixa)
 
 	args = {'mes': mes,
-	 		'despesas': despesas}
+	 		'despesas': despesas,
+	 		'despesas_fixa': despesas_fixa,}
 
 	return render(request, 'financ/despesas.html', args)
 
-def Despesa_Add(request):
+def Despesa_Add(request):	
 	if request.method == 'POST':
+
+		p_fixa    = bool(request.POST.get('id_fixo'))
+
 		form = DespesaFormView(request.POST)
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
-			despesa.save()            
+			despesa.fixa = p_fixa			
+			despesa.save()       			     
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
 
@@ -64,20 +77,44 @@ def Despesa_Add(request):
 	return render(request, 'financ/despesa_add.html', args)
 
 def Despesa_View(request,pk):
-    despesa = get_object_or_404(Despesa, pk=pk)    
-    
-    args = {'despesa': despesa}
+	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
+	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
+	current  = datetime.datetime(p_ano , p_mes, 1)
+	mes = dict()
+	mes['atual'] = current
 
-    return render(request, 'financ/despesa_view.html', args)
+	despesa = get_object_or_404(Despesa, pk=pk)    
+	despesa.dt_vencimento = datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)
+
+	args = {'despesa': despesa,
+			'mes': mes,}
+
+	return render(request, 'financ/despesa_view.html', args)
 
 def Despesa_Edit(request,pk):
+	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
+	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
+	p_fixa   = int(request.GET.get('fixa', 0))
+
 	despesa = get_object_or_404(Despesa, pk=pk)
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
-			despesa.save()            
+			if despesa.fixa == True:
+				Despesa.objects.create(valor		  = despesa.valor,
+									   descricao	  = despesa.descricao,
+									   dt_vencimento  = despesa.dt_vencimento,
+									   categoria	  = despesa.categoria,
+									   pago		      = despesa.pago,
+									   fixa           = False,
+									   pk_fixa        = despesa.pk
+									   )
+
+			else:
+				despesa.save()
+
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
 
@@ -85,8 +122,11 @@ def Despesa_Edit(request,pk):
 			return response
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
-	else:
-		form = DespesaFormView(instance=despesa)        
+	else:				
+		data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
+		form = DespesaFormView(instance=despesa,
+							   initial=data)       
+		
 
 	args = {'form': form}    
 

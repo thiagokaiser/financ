@@ -7,6 +7,8 @@ class Despesa(models.Model):
 	dt_vencimento	= models.DateField()			
 	categoria		= models.ForeignKey('Categoria', on_delete=models.PROTECT)
 	pago			= models.BooleanField(default=False)
+	fixa            = models.BooleanField(default=False)
+	pk_fixa         = models.IntegerField(blank=True, default=0)
 	def __str__(self):
 		return self.descricao
 

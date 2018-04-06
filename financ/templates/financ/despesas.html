@@ -91,6 +91,16 @@
                                 <td class="colunatable" data-order="{% load l10n %}{{ despesa.valor|unlocalize }}">{{ despesa.valor }}</td>                                                
                             </tr>                
                             {% endfor %}
+                            {% for despesa_fixa in despesas_fixa %}                                        
+                            <tr id="{{ despesa_fixa.pk }}" >
+                                <td data-order="{{ despesa_fixa.pago }}"><i class="fa fa-circle" {% if despesa_fixa.pago == False %} style="color:red" {% else %} style="color:#41db53"{% endif %}></i></td>
+                                <td class="colunatable"> {{ despesa_fixa.descricao }}</td>                        
+                                <td class="colunatable"><i class="fa fa-circle" style="color: {{ despesa_fixa.categoria.cor }}"></i> {{ despesa_fixa.categoria.descricao }}</td>
+                                <td class="colunatable"><span style="display: none;">{{ despesa_fixa.dt_vencimento|date:"Ymd" }}</span>{{ despesa_fixa.dt_vencimento|date:"j/b/Y" }}</td>                        
+                                <td class="colunatable" data-order="{% load l10n %}{{ despesa_fixa.valor|unlocalize }}">{{ despesa_fixa.valor }}</td>
+                            </tr>                
+                            {% endfor %}
+
                         </tbody>
 
                     </table>
@@ -125,7 +135,7 @@
 
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
-        window.location.href = "view/" + chave + "/";
+        window.location.href = "view/" + chave + "/?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}";
     });        
     $(".btn-mes-ok").click(function(e) {                
         v_ano = $('.ano').selectpicker('val')

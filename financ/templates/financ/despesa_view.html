@@ -15,17 +15,32 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
-            
-            <a class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Voltar</a>
-            <a class="btn btn-default" href="{% url 'financ:despesa_edit' pk=despesa.pk %}">Editar</a>
-            <a id="bt-del" class="btn btn-default" 
-               data-toggle="confirmation" data-placement="bottom"
-               data-btn-ok-label="Confirmar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
-               data-btn-ok-class="btn-success"
-               data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
-               data-btn-cancel-class="btn-danger"
-               data-title="Tem certeza?" data-content="A despesa será excluida permanentemente.">Deletar </a>          
+            <div class="btn-group" role="group" aria-label="...">
+                <a type="button" class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Voltar</a>                
+                {% if despesa.fixa == False and despesa.pk_fixa == 0 %}
+                    <a type="button" class="btn btn-default" href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}">Editar</a>
+                {% else %}
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Editar
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}&fixa=1">Somente esta</a></li>
+                            <li><a href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}&fixa=2">Todas não pagas</a></li>                    
+                        </ul>
+                    </div>
+                {% endif %}
+                <button type="button" id="bt-del" class="btn btn-default" 
+                   data-toggle="confirmation" data-placement="bottom"
+                   data-btn-ok-label="Confirmar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
+                   data-btn-ok-class="btn-success"
+                   data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
+                   data-btn-cancel-class="btn-danger"
+                   data-title="Tem certeza?" data-content="A despesa será excluida permanentemente.">Deletar </button>                          
+            </div>
             <p/>
+
             <table class="table" style="max-width:500px;">
                 <tr>
                     <th>Valor</th>
