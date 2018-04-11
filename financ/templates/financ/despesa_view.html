@@ -15,10 +15,29 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-del">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Tem certeza que deseja excluir ?</h4>
+                        </div>
+                        <div class="modal-body">                            
+                            <a class="btn btn-default btn-del-ok"><span class="fa fa-check"></span></a>                        
+                            <a class="btn btn-default btn-del-cancel" data-dismiss="modal" aria-label="Close"><span class="fa fa-times"></span></a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>            
             <div class="btn-group" role="group" aria-label="...">
                 <a type="button" class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Voltar</a>                
                 {% if despesa.fixa == False and despesa.pk_fixa == 0 %}
                     <a type="button" class="btn btn-default" href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}">Editar</a>
+                    <a type="button" class="btn btn-default" href="" data-toggle="modal" data-target="#div-del">Deletar</a>
+
                 {% else %}
                     <div class="btn-group" role="group">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -27,17 +46,24 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li><a href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}&fixa=1">Somente esta</a></li>
-                            <li><a href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}&fixa=2">Todas não pagas</a></li>                    
+                            <li><a href="{% url 'financ:despesa_edit_all' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}&fixa=2">Todas não pagas</a></li>                    
                         </ul>
                     </div>
-                {% endif %}
-                <button type="button" id="bt-del" class="btn btn-default" 
-                   data-toggle="confirmation" data-placement="bottom"
-                   data-btn-ok-label="Confirmar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
-                   data-btn-ok-class="btn-success"
-                   data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
-                   data-btn-cancel-class="btn-danger"
-                   data-title="Tem certeza?" data-content="A despesa será excluida permanentemente.">Deletar </button>                          
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Deletar
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li>                            
+                                <a href="" data-toggle="modal" data-target="#div-del">Somente esta</a>
+                            </li>
+                            <li>
+                                <a href="" data-toggle="modal" data-target="#div-del">Todas não pagas</a>
+                            </li>                    
+                        </ul>
+                    </div>
+                {% endif %}                                
             </div>
             <p/>
 
@@ -75,23 +101,7 @@
 
 <script type="text/javascript">        
 
-    $('#bt-del').confirmation({
-        rootSelector: '[data-toggle=confirmation]',
-        onConfirm: function () {
-            var categoria_list = [];        
-            categoria_list.push({{ categoria.pk }});
-            $.ajax({
-                url:"{% url 'financ:categoria_del' %}",
-                type: "POST",            
-                data: {categoria_lista: categoria_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success:function(response){
-                window.location.href= "{% url 'financ:categoria_list' %}"
-                },
-                complete:function(){},
-                error:function (xhr, textStatus, thrownError){}
-            });
-        }
-    });    
+    
 
 </script>
 {% endblock javascript %}

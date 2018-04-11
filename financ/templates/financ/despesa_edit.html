@@ -5,8 +5,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Inbox
-        <small>Mensagens</small>
+        Despesa
+        <small>Edita</small>
     </h1>                    
 </section>
 
@@ -20,7 +20,7 @@
                     {{ form.as_table }}                    
                 </table>
                 <button class="btn btn-default" type="submit">Salvar</button>
-                <a class="btn btn-default" href="{% url 'financ:despesas' %}">Cancelar</a>
+                <a class="btn btn-default" href="{% url 'financ:despesa_view' pk=despesa.pk %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Cancelar</a>
             </form>
         </div>
     </div>

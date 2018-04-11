@@ -38,7 +38,7 @@
                 </div>                    
                 <p></p>
                 <button class="btn btn-default" type="submit">Salvar</button>
-                <a class="btn btn-default" href="{% url 'financ:despesas' %}">Cancelar</a>
+                <a class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}">Cancelar</a>
             </form>            
             <div class="modal fade" tabindex="-1" role="dialog" id="div-add-categ">
                 <div class="modal-dialog" role="document">

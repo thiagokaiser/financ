@@ -15,7 +15,7 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
-            <a class="btn btn-default" href="{% url 'financ:despesa_add' %}"><span class="fa fa-plus-circle"></span></a>
+            <a class="btn btn-default" href="{% url 'financ:despesa_add' %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}"><span class="fa fa-plus-circle"></span></a>
 
             <p></p>
 

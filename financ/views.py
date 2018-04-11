@@ -52,6 +52,12 @@ def Despesas(request):
 	return render(request, 'financ/despesas.html', args)
 
 def Despesa_Add(request):	
+	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
+	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
+	current  = datetime.datetime(p_ano , p_mes, 1)
+	mes = dict()
+	mes['atual'] = current
+
 	if request.method == 'POST':
 
 		p_fixa    = bool(request.POST.get('id_fixo'))
@@ -72,7 +78,7 @@ def Despesa_Add(request):
 	else:
 		form = DespesaFormView()
 
-	args = {'form': form, 'form_categ': CategoriaFormView()}
+	args = {'form': form, 'form_categ': CategoriaFormView(), 'mes': mes}
 
 	return render(request, 'financ/despesa_add.html', args)
 
@@ -95,6 +101,7 @@ def Despesa_Edit(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
 	p_fixa   = int(request.GET.get('fixa', 0))
+	
 
 	despesa = get_object_or_404(Despesa, pk=pk)
 	if request.method == 'POST':
@@ -128,7 +135,49 @@ def Despesa_Edit(request,pk):
 							   initial=data)       
 		
 
-	args = {'form': form}    
+	args = {'form': form, 'despesa': despesa}    
+
+	return render(request, 'financ/despesa_edit.html', args)
+
+def Despesa_Edit_All(request,pk):
+	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
+	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
+	p_fixa   = int(request.GET.get('fixa', 0))
+	
+
+	despesa = get_object_or_404(Despesa, pk=pk)
+	if request.method == 'POST':
+		form = DespesaFormView(request.POST, instance=despesa)        
+		if form.is_valid():  
+			despesa = form.save(commit=False)           	
+			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
+			if despesa.fixa == True:
+				Despesa.objects.create(valor		  = despesa.valor,
+									   descricao	  = despesa.descricao,
+									   dt_vencimento  = despesa.dt_vencimento,
+									   categoria	  = despesa.categoria,
+									   pago		      = despesa.pago,
+									   fixa           = False,
+									   pk_fixa        = despesa.pk
+									   )
+
+			else:
+				despesa.save()
+
+			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
+			response = redirect('financ:despesas')
+
+			response['Location'] += url
+			return response
+		else:
+			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+	else:				
+		data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
+		form = DespesaFormView(instance=despesa,
+							   initial=data)       
+		
+
+	args = {'form': form, 'despesa': despesa}    
 
 	return render(request, 'financ/despesa_edit.html', args)
 
