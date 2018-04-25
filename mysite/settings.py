@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['kaiserz.pythonanywhere.com',
 INSTALLED_APPS = [
     'app.apps.AppConfig',
     'financ.apps.FinancConfig',
+    'ponto.apps.PontoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
