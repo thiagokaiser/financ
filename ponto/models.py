@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+class PontoUser(models.Manager):
+	def get_queryset(self):
+		qs = super(PontoUser, self).get_queryset()		
+		return qs.filter(observacao='teste')
+
 class Ponto(models.Model):
 	usuario      = models.ForeignKey(User, on_delete=models.CASCADE,default='')
 	dia          = models.DateField()			
@@ -14,3 +20,7 @@ class Ponto(models.Model):
 	def __str__(self):
 		retorno = self.dia + ' ' + self.hora
 		return retorno
+
+
+	objects = models.Manager()
+	objects_user = PontoUser()

@@ -20,7 +20,7 @@
                     {{ form.as_table }}                    
                 </table>
                 <button class="btn btn-default" type="submit">Salvar</button>
-                <a class="btn btn-default" href="{% url 'ponto:ponto_list' %}">Cancelar</a>
+                <a class="btn btn-default" href="{% url 'ponto:ponto_view' pk=ponto.pk %}">Voltar</a>
             </form>
         </div>
     </div>

@@ -17,6 +17,30 @@
         <div class="box-body">             
             <a class="btn btn-default" href="{% url 'ponto:ponto_add' %}"><span class="fa fa-plus-circle"></span></a>
             <p></p>
+            <div class="table-responsive">
+                <div style="max-width:300px;">
+                    <table class="table table-bordered table-selectable" id="table_despesa">                    
+                        <thead>                            
+                            <th style="max-width:10px;">Tipo</th>
+                            <th>Dia</th>
+                            <th>Hora</th>                            
+                            <th>Observ.</th>                            
+                        </thead>
+                        <tbody>
+                            {% for i in ponto %}                                        
+                            <tr id="{{ i.pk }}" >
+                                <td class="colunatable">{{ i.tipo }}</td>                                                                                
+                                <td class="colunatable">{{ i.dia|date:"d/m/Y" }}</td>
+                                <td class="colunatable">{{ i.hora }}</td>                                                                                
+                                <td class="colunatable">{{ i.observacao }}</td>                                                                                
+                            </tr>                
+                            {% endfor %}                            
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>            
         </div>
     </div>
 
@@ -30,8 +54,7 @@
 <script type="text/javascript" src="{% static 'app/plugins/datatables/jquery.dataTables.min.js'  %}"></script>
 <script type="text/javascript" src="{% static 'app/plugins/datatables/dataTables.bootstrap.min.js'  %}"></script>
 
-<script type="text/javascript">
-    /*
+<script type="text/javascript">    
     $(document).ready(function(){                
         $('#table_despesa').DataTable({
           "paging": false,
@@ -46,15 +69,10 @@
 
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
-        window.location.href = "view/" + chave + "/?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}";
+        window.location.href = "view/" + chave;
     });        
-    $(".btn-mes-ok").click(function(e) {                
-        v_ano = $('.ano').selectpicker('val')
-        v_mes = $('.mes').selectpicker('val')        
-        window.location.href = "{% url 'financ:despesas' %}?year=" + v_ano + "&month=" + v_mes;
-    });        
-    $('.mes').val('{{ mes.atual|date:"m" }}'); 
-    $('.ano').val('{{ mes.atual|date:"Y" }}');      
-    */
+    
+    
+    
 </script>
 {% endblock javascript %}
