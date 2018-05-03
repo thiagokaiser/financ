@@ -15,6 +15,12 @@ class DespesaFormView(forms.ModelForm):
             'dt_vencimento': TextInput(attrs={'type': 'date'}),
         }
 
+    def __init__(self, *args, **kwargs):    
+        user = kwargs.pop('user', None)    
+        super(DespesaFormView, self).__init__(*args, **kwargs)        
+        if user:
+            self.fields['categoria'].queryset = Categoria.objects.filter(usuario=user)
+
 class CategoriaFormView(forms.ModelForm):
     class Meta:
         model = Categoria

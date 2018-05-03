@@ -22,8 +22,8 @@ def Ponto_List(request):
 def Ponto_Add(request):
 	if request.method == 'POST':
 		form = PontoForm(request.POST)
-		if form.is_valid():  
-			ponto = form.save(commit=False)           				
+		if form.is_valid():
+			ponto = form.save(commit=False)
 			ponto.usuario = request.user
 			ponto.save()
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')			
@@ -56,14 +56,14 @@ def Ponto_Edit(request,pk):
 		return redirect('ponto:ponto_list')
 	if request.method == 'POST':
 		form = PontoForm(request.POST, instance=ponto)        
-		if form.is_valid():  		
+		if form.is_valid():
 			form.save()
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			return redirect('ponto:ponto_list')
 		else:
-			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')
 	else:						
-		form = PontoForm(instance=ponto)       	
-	args = {'form': form, 'ponto': ponto}    
+		form = PontoForm(instance=ponto)
+	args = {'form': form, 'ponto': ponto}
 
 	return render(request, 'ponto/ponto_edit.html', args)

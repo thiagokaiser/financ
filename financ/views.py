@@ -37,7 +37,8 @@ def Despesas(request):
 	mes['anterior'] 	= prev_month
 
 	despesas = Despesa.objects.filter(dt_vencimento__year=current.year,
-                                      dt_vencimento__month=current.month).exclude(fixa=True)
+                                      dt_vencimento__month=current.month,
+                                      usuario=request.user).exclude(fixa=True)
 
 	despesas_fixa = Despesa.objects.filter(fixa=True)
 	for despesa in despesas_fixa:				
@@ -66,7 +67,8 @@ def Despesa_Add(request):
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
-			despesa.fixa = p_fixa			
+			despesa.fixa = p_fixa
+			despesa.usuario = request.user			
 			despesa.save()       			     
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
@@ -76,7 +78,7 @@ def Despesa_Add(request):
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
-		form = DespesaFormView()
+		form = DespesaFormView(user=request.user)
 
 	args = {'form': form, 'form_categ': CategoriaFormView(), 'mes': mes}
 
@@ -119,7 +121,7 @@ def Despesa_Edit(request,pk):
 									   pk_fixa        = despesa.pk
 									   )
 
-			else:
+			else:				
 				despesa.save()
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
@@ -132,7 +134,8 @@ def Despesa_Edit(request,pk):
 	else:				
 		data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
 		form = DespesaFormView(instance=despesa,
-							   initial=data)       
+							   initial=data,
+							   user=request.user)       
 		
 
 	args = {'form': form, 'despesa': despesa}    
@@ -174,7 +177,8 @@ def Despesa_Edit_All(request,pk):
 	else:				
 		data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
 		form = DespesaFormView(instance=despesa,
-							   initial=data)       
+							   initial=data,
+							   user=request.user)       
 		
 
 	args = {'form': form, 'despesa': despesa}    
@@ -186,8 +190,10 @@ def Categoria_Add(request):
 		if request.method == 'POST':
 			form = CategoriaFormView(request.POST)
 			if form.is_valid():
-				salvar = form.save()			
-				retorno_dict = {'chave': salvar.pk, 'descricao': salvar.descricao}				
+				categoria = form.save(commit=False)           	
+				categoria.usuario = request.user
+				categoria.save()
+				retorno_dict = {'chave': categoria.pk, 'descricao': categoria.descricao}				
 			else:
 				retorno_dict = {'chave': 'erro', 'descricao': str(form.errors)}
 
@@ -198,7 +204,9 @@ def Categoria_Add(request):
 		if request.method == 'POST':
 			form = CategoriaFormView(request.POST)
 			if form.is_valid():
-				form.save()
+				categoria = form.save(commit=False)           	
+				categoria.usuario = request.user
+				categoria.save()
 				return redirect('financ:categoria_list')
 		else:
 			form = CategoriaFormView()
@@ -208,7 +216,7 @@ def Categoria_Add(request):
 		return render(request, 'financ/categoria_add.html', args)
 
 def Categoria_List(request):	
-	categorias = Categoria.objects.all()
+	categorias = Categoria.objects.filter(usuario=request.user)	
 	args = {'categorias': categorias}
 	return render(request, 'financ/categoria_list.html', args)
 

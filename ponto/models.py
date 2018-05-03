@@ -10,7 +10,7 @@ class PontoUser(models.Manager):
 
 class Ponto(models.Model):
 	usuario      = models.ForeignKey(User, on_delete=models.CASCADE,default='')
-	dia          = models.DateField()			
+	dia          = models.DateField()
 	hora         = models.TimeField()			
 	observacao   = models.CharField(max_length=40, blank=True)		
 	tipo         = models.CharField(max_length=9,
