@@ -91,7 +91,10 @@ def Despesa_View(request,pk):
 	mes = dict()
 	mes['atual'] = current
 
-	despesa = get_object_or_404(Despesa, pk=pk)    
+	despesa = get_object_or_404(Despesa, pk=pk)
+	if despesa.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:despesas')    
 	despesa.dt_vencimento = datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)
 
 	args = {'despesa': despesa,
@@ -106,6 +109,9 @@ def Despesa_Edit(request,pk):
 	
 
 	despesa = get_object_or_404(Despesa, pk=pk)
+	if despesa.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:despesas')
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
@@ -150,6 +156,9 @@ def Despesa_Edit_All(request,pk):
 	
 
 	despesa = get_object_or_404(Despesa, pk=pk)
+	if despesa.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:despesas')
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
@@ -223,12 +232,18 @@ def Categoria_List(request):
 
 def Categoria_View(request, pk):
 	categoria = get_object_or_404(Categoria, pk=pk)
+	if categoria.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:categoria_list')
 
 	args = {'categoria': categoria}
 	return render(request, 'financ/categoria_view.html', args)
 
 def Categoria_Edit(request, pk):
 	categoria = get_object_or_404(Categoria, pk=pk)
+	if categoria.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:categoria_list')
 	if request.method == 'POST':
 		form = CategoriaFormView(request.POST, instance=categoria)        
 		if form.is_valid():  			
@@ -251,6 +266,9 @@ def Categoria_Del(request):
             categoria_list = request.POST.getlist('categoria_lista[]')            
             for i in categoria_list:
                 categoria = Categoria.objects.get(pk=i)
+                if categoria.usuario != request.user:
+                    messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+                    return redirect('financ:categoria_list')
                 categoria.delete()            
             messages.success(request, "Mensagens excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
         else:
