@@ -118,7 +118,8 @@ def Despesa_Edit(request,pk):
 									   categoria	  = despesa.categoria,
 									   pago		      = despesa.pago,
 									   fixa           = False,
-									   pk_fixa        = despesa.pk
+									   pk_fixa        = despesa.pk,
+									   usuario        = request.user
 									   )
 
 			else:				

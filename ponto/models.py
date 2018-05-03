@@ -18,7 +18,7 @@ class Ponto(models.Model):
               						default="entrada")
 	
 	def __str__(self):
-		retorno = self.dia + ' ' + self.hora
+		retorno = str(self.dia) + '  ' + str(self.hora)
 		return retorno
 
 
