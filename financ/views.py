@@ -40,7 +40,7 @@ def Despesas(request):
                                       dt_vencimento__month=current.month,
                                       usuario=request.user).exclude(fixa=True)
 
-	despesas_fixa = Despesa.objects.filter(fixa=True)
+	despesas_fixa = Despesa.objects.filter(fixa=True, usuario=request.user)
 	for despesa in despesas_fixa:				
 		despesa.dt_vencimento = datetime.datetime(current.year, current.month, despesa.dt_vencimento.day)		
 	for despesa in despesas:		
