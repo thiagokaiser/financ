@@ -9,13 +9,25 @@ from .models import(
 from django.utils import timezone
 from django.contrib import messages
 from django.core import serializers
-import datetime
+from datetime import datetime, timedelta
 import calendar
-
+#import pdb; pdb.set_trace()
 # Create your views here.
 def Ponto_List(request):
-	ponto = Ponto.objects.filter(usuario=request.user)
-	args = {'ponto': ponto}
+	dia = datetime.today() - timedelta(days=10)
+	p_dt_ini    = request.GET.get('dt_ini', dia.strftime('%Y-%m-%d'))
+	p_dt_fim    = request.GET.get('dt_fim', datetime.today().strftime('%Y-%m-%d'))
+
+	periodo = {'dt_ini': p_dt_ini,
+               'dt_fim': p_dt_fim}
+
+	#import pdb; pdb.set_trace()
+
+	ponto = Ponto.objects.filter(usuario=request.user,
+								 dia__range=(p_dt_ini, p_dt_fim))	
+	ponto = ponto.order_by('dia')
+	args = {'ponto': ponto,
+			'periodo':periodo}
 
 	return render(request, 'ponto/ponto.html', args)
 

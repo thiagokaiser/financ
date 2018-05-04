@@ -17,14 +17,22 @@
         <div class="box-body">             
             <a class="btn btn-default" href="{% url 'ponto:ponto_add' %}"><span class="fa fa-plus-circle"></span></a>
             <p></p>
+            <form method="GET">                
+                <input name="dt_ini" class="input-sm" type="date" value="{{ periodo.dt_ini }}">
+                <i class="fa fa-chevron-left"></i>
+                <i class="fa fa-chevron-right"></i>                
+                <input name="dt_fim" class="input-sm" type="date" value="{{ periodo.dt_fim }}">
+                <button class="btn btn-default btn-sm" type="submit" id="btn_filtro"><span class="glyphicon glyphicon-search"></span></button>
+            </form>
+            <p></p>            
             <div class="table-responsive">
-                <div style="max-width:300px;">
-                    <table class="table table-bordered table-selectable" id="table_despesa">                    
-                        <thead>                            
+                <div style="max-width:500px;">
+                    <table class="table table-bordered table-selectable" id="table_despesa">
+                        <thead>
                             <th style="max-width:10px;">Tipo</th>
                             <th>Dia</th>
-                            <th>Hora</th>                            
-                            <th>Observ.</th>                            
+                            <th>Hora</th>
+                            <th>Observ.</th>
                         </thead>
                         <tbody>
                             {% for i in ponto %}                                        
