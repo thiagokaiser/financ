@@ -81,3 +81,19 @@ def Ponto_Edit(request,pk):
 	args = {'form': form, 'ponto': ponto}
 
 	return render(request, 'ponto/ponto_edit.html', args)
+
+def Ponto_Del(request):
+    if request.POST and request.is_ajax():        
+        if request.POST.getlist('ponto_lista[]'):
+            ponto_list = request.POST.getlist('ponto_lista[]')            
+            for i in ponto_list:
+                ponto = Ponto.objects.get(pk=i)
+                if ponto.usuario != request.user:
+                    messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+                    return redirect('ponto:ponto_list')
+                ponto.delete()            
+            messages.success(request, "Ponto excluido com sucesso.", extra_tags='alert-success alert-dismissible')            
+        else:
+            messages.error(request, "Nenhum ponto selecionado.", extra_tags='alert-error alert-dismissible')               
+
+    return HttpResponse('')

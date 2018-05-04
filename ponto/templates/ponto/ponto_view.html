@@ -21,7 +21,29 @@
             </table>
             <p></p>
             <a class="btn btn-default" href="{% url 'ponto:ponto_edit' pk=ponto.pk %}">Editar</a> 
+            <a class="btn btn-default" href="" data-toggle="modal" data-target="#div-btn-mes">Deletar</a> 
             <a class="btn btn-default" href="{% url 'ponto:ponto_list' %}">Cancelar</a>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-mes">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Dia: {{ form.dia.value|date:"d/m/Y" }} Hora: {{ form.hora.value }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            Tem certeza que deseja deletar o ponto selecionado ?
+                            <p></p>
+                            <a class="btn btn-default btn-del-ok" id="bt-confirm-del"><span class="fa fa-check"></span></a>                        
+                            <a class="btn btn-default btn-del-cancel" data-dismiss="modal" aria-label="Close"><span class="fa fa-times"></span></a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         
         </div>
     </div>
@@ -34,7 +56,20 @@
 
 <script type="text/javascript">        
 
-    
+    $('#bt-confirm-del').click(function(e) {
+        var ponto_list = [];        
+        ponto_list.push({{ ponto.pk }});
+        $.ajax({
+            url:"{% url 'ponto:ponto_del' %}",
+            type: "POST",            
+            data: {ponto_lista: ponto_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success:function(response){
+            window.location.href= "{% url 'ponto:ponto_list' %}"
+            },
+            complete:function(){},
+            error:function (xhr, textStatus, thrownError){}
+        });        
+    }); 
 
 </script>
 {% endblock javascript %}
