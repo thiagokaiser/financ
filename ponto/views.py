@@ -25,7 +25,7 @@ def Ponto_List(request):
 
 	ponto = Ponto.objects.filter(usuario=request.user,
 								 dia__range=(p_dt_ini, p_dt_fim))	
-	ponto = ponto.order_by('dia')
+	ponto = ponto.order_by('dia','hora')
 	args = {'ponto': ponto,
 			'periodo':periodo}
 
@@ -43,7 +43,9 @@ def Ponto_Add(request):
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
-		form = PontoForm()
+		data = {'dia': datetime.today().strftime('%Y-%m-%d'),
+				'hora': datetime.today().strftime('%H:%M')}
+		form = PontoForm(initial=data)
 
 	args = {'form': form}
 
