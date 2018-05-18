@@ -46,5 +46,6 @@ def delete_file_on_change_pagto(sender, instance, **kwargs):
 
     new_file = instance.comprovante
     if not old_file == new_file:
-        if os.path.isfile(old_file.path):
-            os.remove(old_file.path)
+        if old_file:
+            if os.path.isfile(old_file.path):
+                os.remove(old_file.path)
