@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+import os
 
 # Create your models here.
 
@@ -16,6 +18,7 @@ class Ponto(models.Model):
 	tipo         = models.CharField(max_length=9,
                   					choices=(('entrada','Entrada'),('saida','Saida')),
               						default="entrada")
+	comprovante  = models.FileField(upload_to='ponto/comprovantes/', blank=True, null=True)
 	
 	def __str__(self):
 		retorno = str(self.dia) + '  ' + str(self.hora)
@@ -24,3 +27,24 @@ class Ponto(models.Model):
 
 	objects = models.Manager()
 	objects_user = PontoUser()
+
+@receiver(models.signals.post_delete, sender=Ponto)
+def delete_file_on_del_pagto(sender, instance, **kwargs):    
+    if instance.comprovante:
+        if os.path.isfile(instance.comprovante.path):
+            os.remove(instance.comprovante.path)
+
+@receiver(models.signals.pre_save, sender=Ponto)
+def delete_file_on_change_pagto(sender, instance, **kwargs):    
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = Ponto.objects.get(pk=instance.pk).comprovante
+    except Ponto.DoesNotExist:
+        return False
+
+    new_file = instance.comprovante
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)

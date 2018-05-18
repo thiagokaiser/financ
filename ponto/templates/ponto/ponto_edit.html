@@ -15,7 +15,7 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <table class="table" style="max-width:300px;">  {% csrf_token %}
                     {{ form.as_table }}                    
                 </table>

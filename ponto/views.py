@@ -33,7 +33,7 @@ def Ponto_List(request):
 
 def Ponto_Add(request):
 	if request.method == 'POST':
-		form = PontoForm(request.POST)
+		form = PontoForm(request.POST, request.FILES)
 		if form.is_valid():
 			ponto = form.save(commit=False)
 			ponto.usuario = request.user
@@ -69,7 +69,7 @@ def Ponto_Edit(request,pk):
 		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
 		return redirect('ponto:ponto_list')
 	if request.method == 'POST':
-		form = PontoForm(request.POST, instance=ponto)        
+		form = PontoForm(request.POST, request.FILES, instance=ponto)        
 		if form.is_valid():
 			form.save()
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')

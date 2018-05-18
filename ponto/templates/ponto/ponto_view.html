@@ -17,7 +17,8 @@
         <div class="box-body">             
             
             <table class="table" style="max-width:300px;">  {% csrf_token %}
-                {{ form.as_table }}                    
+                {{ form.as_table }}             
+                <tr><th>Comprovante:      </th><td> {% if ponto.comprovante %}<a href="{{ ponto.comprovante.url }}">{{ ponto.comprovante }} </a> {% endif %} </td></tr>
             </table>
             <p></p>
             <a class="btn btn-default" href="{% url 'ponto:ponto_edit' pk=ponto.pk %}">Editar</a> 

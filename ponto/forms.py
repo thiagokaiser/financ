@@ -8,7 +8,8 @@ class PontoForm(forms.ModelForm):
         fields = ('dia',        
 				  'hora',       
 				  'observacao', 	
-				  'tipo'       
+				  'tipo',
+                  'comprovante'       
         		)
         widgets = {
             'dia': TextInput(attrs={'type': 'date'}),
@@ -21,11 +22,11 @@ class PontoFormView(forms.ModelForm):
         fields = ('dia',        
                   'hora',       
                   'observacao',     
-                  'tipo'       
+                  'tipo',                  
                 )
         widgets = {
             'dia': TextInput(attrs={'type': 'date', 'disabled': True}),
             'hora': TextInput(attrs={'type': 'time', 'disabled': True}),
             'observacao': TextInput(attrs={'disabled': True}),
-            'tipo': TextInput(attrs={'disabled': True}),
+            'tipo': TextInput(attrs={'disabled': True}),            
         }
