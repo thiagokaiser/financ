@@ -28,6 +28,13 @@ class Ponto(models.Model):
 	objects = models.Manager()
 	objects_user = PontoUser()
 
+class ParamPonto(models.Model):
+    usuario      = models.ForeignKey(User, on_delete=models.CASCADE,default='')
+    entrada      = models.TimeField()           
+    saida        = models.TimeField()           
+    tolerancia   = models.TimeField()           
+
+
 @receiver(models.signals.post_delete, sender=Ponto)
 def delete_file_on_del_pagto(sender, instance, **kwargs):    
     if instance.comprovante:

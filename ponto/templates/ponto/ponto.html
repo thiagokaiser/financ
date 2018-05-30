@@ -16,6 +16,41 @@
     <div class="box box-default">            
         <div class="box-body">             
             <a class="btn btn-default" href="{% url 'ponto:ponto_add' %}"><span class="fa fa-plus-circle"></span></a>
+            
+            <a class="btn btn-default" href="" data-toggle="modal" data-target="#div-btn-param"><span class="fa fa-clock-o"></span></a> 
+            
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-param">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Paramêtros Ponto:</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <form method="POST" id="form_paramponto">
+                                <table class="table" style="max-width:300px;">  {% csrf_token %}
+                                    {{ paramponto.as_table }}                                        
+                                </table>                                
+                                <a class="btn btn-default btn-del-ok" id="salva_paramponto"><span class="fa fa-check"></span></a>                        
+                                <a class="btn btn-default btn-del-cancel" data-dismiss="modal" aria-label="Close"><span class="fa fa-times"></span></a>
+                            </form>
+
+                            <p></p>
+                            
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
             <p></p>
             <form method="GET">                
                 <input name="dt_ini" class="input-sm" type="date" value="{{ periodo.dt_ini }}">
@@ -80,7 +115,20 @@
         window.location.href = "view/" + chave;
     });        
     
-    
+    $("#salva_paramponto").click(function(e){ 
+        $.ajax({
+            url:"{% url 'ponto:paramponto_edit' %}",
+            type: "POST",            
+            data: $("#form_paramponto").serialize(),            
+            success:function(response){ 
+                location.reload();                                   
+            },
+            complete:function(){},
+            error:function (xhr, textStatus, thrownError){
+                
+            }
+        });
+    });
     
 </script>
 {% endblock javascript %}

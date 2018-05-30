@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.widgets import TextInput
-from .models import Ponto
+from .models import Ponto, ParamPonto
 
 class PontoForm(forms.ModelForm):    
     class Meta:
@@ -29,4 +29,18 @@ class PontoFormView(forms.ModelForm):
             'hora': TextInput(attrs={'type': 'time', 'disabled': True}),
             'observacao': TextInput(attrs={'disabled': True}),
             'tipo': TextInput(attrs={'disabled': True}),            
+        }
+
+class ParamPontoForm(forms.ModelForm):    
+    class Meta:
+        model = ParamPonto
+        fields = ('entrada',        
+                  'saida',       
+                  'tolerancia'
+                  
+                )
+        widgets = {
+            'entrada': TextInput(attrs={'type': 'time'}),
+            'saida': TextInput(attrs={'type': 'time'}),
+            'tolerancia': TextInput(attrs={'type': 'time'}),
         }

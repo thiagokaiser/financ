@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .forms import(
 	PontoForm,
 	PontoFormView,
+	ParamPontoForm,
 	)
 from .models import(
 	Ponto,
+	ParamPonto,
 	)
 from django.utils import timezone
 from django.contrib import messages
@@ -26,8 +28,23 @@ def Ponto_List(request):
 	ponto = Ponto.objects.filter(usuario=request.user,
 								 dia__range=(p_dt_ini, p_dt_fim))	
 	ponto = ponto.order_by('dia','hora')
+	
+	try:
+	    paramponto = ParamPonto.objects.get(usuario=request.user)
+	except ParamPonto.DoesNotExist:
+	    paramponto = None
+	if not paramponto:
+		paramponto = ParamPonto.objects.create(usuario=request.user,
+								  entrada="07:30",
+								  saida="17:18",
+								  tolerancia="00:00")
+
+	parampontoform = ParamPontoForm(instance=paramponto)
+
 	args = {'ponto': ponto,
-			'periodo':periodo}
+			'periodo':periodo,
+			'paramponto': parampontoform,
+			'parampontoform': paramponto}
 
 	return render(request, 'ponto/ponto.html', args)
 
@@ -97,3 +114,13 @@ def Ponto_Del(request):
             messages.error(request, "Nenhum ponto selecionado.", extra_tags='alert-error alert-dismissible')               
 
     return HttpResponse('')
+
+def ParamPonto_Edit(request):
+	if request.is_ajax():
+		if request.method == 'POST':
+			paramponto = ParamPonto.objects.get(usuario=request.user)
+			form = ParamPontoForm(request.POST, instance=paramponto)
+			if form.is_valid():				
+				form.save()				
+			
+			return HttpResponse('')   
