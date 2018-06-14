@@ -11,7 +11,7 @@ from .models import(
 from django.utils import timezone
 from django.contrib import messages
 from django.core import serializers
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import calendar
 #import pdb; pdb.set_trace()
 # Create your views here.
@@ -39,7 +39,31 @@ def Ponto_List(request):
 								  saida="17:18",
 								  tolerancia="00:00")
 
-	parampontoform = ParamPontoForm(instance=paramponto)
+	parampontoform = ParamPontoForm(instance=paramponto)	
+
+	#import pdb; pdb.set_trace()
+
+	for i in ponto:		
+		if i.tipo == 'entrada':			
+			v_entrad   = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) + timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
+			v_entrad_l = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) - timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
+			if v_entrad < timedelta(hours=i.hora.hour,minutes=i.hora.minute):
+				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - v_entrad
+				i.cor = "red"		
+			elif v_entrad_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
+				i.banco = v_entrad_l - timedelta(hours=i.hora.hour,minutes=i.hora.minute)
+				i.cor = "green"		
+
+		else:
+			v_saida   = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) + timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
+			v_saida_l = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) - timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
+			if v_saida < timedelta(hours=i.hora.hour,minutes=i.hora.minute):
+				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - v_saida
+				i.cor = "green"		
+			elif v_saida_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
+				i.banco = v_saida - timedelta(hours=i.hora.hour,minutes=i.hora.minute) 
+				i.cor = "red"		
+
 
 	args = {'ponto': ponto,
 			'periodo':periodo,

@@ -61,14 +61,17 @@
                             <th>Dia</th>
                             <th>Hora</th>
                             <th>Observ.</th>
+                            <th>Banco</th>
                         </thead>
                         <tbody>
                             {% for i in ponto %}                                        
-                            <tr id="{{ i.pk }}" >
+                            <tr id="{{ i.pk }}" style="color:{{ i.cor }}">
                                 <td class="colunatable">{{ i.tipo }}</td>                                                                                
                                 <td class="colunatable">{{ i.dia|date:"d/m/Y" }}</td>
                                 <td class="colunatable">{{ i.hora }}</td>                                                                                
                                 <td class="colunatable">{{ i.observacao }}</td>
+                                <td class="colunatable">{{ i.banco }}</td>
+
                             </tr>
                             {% endfor %}
                         </tbody>
