@@ -16,10 +16,8 @@
     <div class="box box-default">            
         <div class="box-body">             
             <a class="btn btn-default" href="{% url 'ponto:ponto_add' %}"><span class="fa fa-plus-circle"></span></a>
-            
             <a class="btn btn-default" href="" data-toggle="modal" data-target="#div-btn-param"><span class="fa fa-clock-o"></span></a> 
             
-
             <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-param">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -30,8 +28,7 @@
                             </button>
                             <h4 class="modal-title">Paramêtros Ponto:</h4>
                         </div>
-                        <div class="modal-body">
-                            
+                        <div class="modal-body">                            
                             <form method="POST" id="form_paramponto">
                                 <table class="table" style="max-width:300px;">  {% csrf_token %}
                                     {{ paramponto.as_table }}                                        
@@ -39,18 +36,11 @@
                                 <a class="btn btn-default btn-del-ok" id="salva_paramponto"><span class="fa fa-check"></span></a>                        
                                 <a class="btn btn-default btn-del-cancel" data-dismiss="modal" aria-label="Close"><span class="fa fa-times"></span></a>
                             </form>
-
                             <p></p>
-                            
-                            
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
             <p></p>
             <form method="GET">                
                 <input name="dt_ini" class="input-sm" type="date" value="{{ periodo.dt_ini }}">
@@ -58,6 +48,9 @@
                 <i class="fa fa-chevron-right"></i>                
                 <input name="dt_fim" class="input-sm" type="date" value="{{ periodo.dt_fim }}">
                 <button class="btn btn-default btn-sm" type="submit" id="btn_filtro"><span class="glyphicon glyphicon-search"></span></button>
+                <br>
+                <input type="radio" class="rs_ponto" id="rs_ponto_all" name="rs_ponto" value="all"> Todos Registros 
+                <input type="radio" class="rs_ponto" id="rs_ponto_exc" name="rs_ponto" value="exc"> Apenas Excedentes                
             </form>
             <p></p>            
             <div class="table-responsive">
@@ -75,12 +68,10 @@
                                 <td class="colunatable">{{ i.tipo }}</td>                                                                                
                                 <td class="colunatable">{{ i.dia|date:"d/m/Y" }}</td>
                                 <td class="colunatable">{{ i.hora }}</td>                                                                                
-                                <td class="colunatable">{{ i.observacao }}</td>                                                                                
-                            </tr>                
-                            {% endfor %}                            
-
+                                <td class="colunatable">{{ i.observacao }}</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
-
                     </table>
                 </div>
             </div>            
@@ -98,6 +89,12 @@
 <script type="text/javascript" src="{% static 'app/plugins/datatables/dataTables.bootstrap.min.js'  %}"></script>
 
 <script type="text/javascript">    
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);        
+        if (results != null){
+            return results[1];            
+        };        
+    }
     $(document).ready(function(){                
         $('#table_despesa').DataTable({
           "paging": false,
@@ -108,8 +105,18 @@
           "autoWidth": true,  
           "dom": '<"top"i>rt<"bottom"flp><"clear">'
         });
+        v_rs_ponto = $.urlParam('rs_ponto');
+        if (v_rs_ponto == 'exc'){
+            $("#rs_ponto_exc").prop("checked", true);
+        }
+        else{
+            $("#rs_ponto_all").prop("checked", true);
+        };
+        
     });
-
+    $(".rs_ponto").change(function(e) {        
+        $("#btn_filtro").click();
+    });
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
         window.location.href = "view/" + chave;
