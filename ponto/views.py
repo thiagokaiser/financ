@@ -48,20 +48,20 @@ def Ponto_List(request):
 			v_entrad   = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) + timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			v_entrad_l = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) - timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			if v_entrad < timedelta(hours=i.hora.hour,minutes=i.hora.minute):
-				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - v_entrad
+				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute)
 				i.cor = "red"		
 			elif v_entrad_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
-				i.banco = v_entrad_l - timedelta(hours=i.hora.hour,minutes=i.hora.minute)
+				i.banco = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) - timedelta(hours=i.hora.hour,minutes=i.hora.minute)
 				i.cor = "green"		
 
 		else:
 			v_saida   = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) + timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			v_saida_l = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) - timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			if v_saida < timedelta(hours=i.hora.hour,minutes=i.hora.minute):
-				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - v_saida
+				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute)
 				i.cor = "green"		
 			elif v_saida_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
-				i.banco = v_saida - timedelta(hours=i.hora.hour,minutes=i.hora.minute) 
+				i.banco = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) - timedelta(hours=i.hora.hour,minutes=i.hora.minute) 
 				i.cor = "red"		
 
 
