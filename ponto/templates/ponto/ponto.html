@@ -64,15 +64,17 @@
                             <th>Banco</th>
                         </thead>
                         <tbody>
-                            {% for i in ponto %}                                        
+                            {% for i in ponto %}    
+                            {% if i.exc == False and p_rs_ponto == 'exc' %}                                                                
+                            {% else %}
                             <tr id="{{ i.pk }}" style="color:{{ i.cor }}">
                                 <td class="colunatable">{{ i.tipo }}</td>                                                                                
                                 <td class="colunatable">{{ i.dia|date:"d/m/Y" }}</td>
                                 <td class="colunatable">{{ i.hora }}</td>                                                                                
                                 <td class="colunatable">{{ i.observacao }}</td>
                                 <td class="colunatable">{{ i.banco }}</td>
-
                             </tr>
+                            {% endif %}                                    
                             {% endfor %}
                         </tbody>
                     </table>

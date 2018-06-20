@@ -19,6 +19,7 @@ def Ponto_List(request):
 	dia = datetime.today() - timedelta(days=10)
 	p_dt_ini    = request.GET.get('dt_ini', dia.strftime('%Y-%m-%d'))
 	p_dt_fim    = request.GET.get('dt_fim', datetime.today().strftime('%Y-%m-%d'))
+	p_rs_ponto  = request.GET.get('rs_ponto', 'all')
 
 	periodo = {'dt_ini': p_dt_ini,
                'dt_fim': p_dt_fim}
@@ -41,34 +42,38 @@ def Ponto_List(request):
 
 	parampontoform = ParamPontoForm(instance=paramponto)	
 
-	#import pdb; pdb.set_trace()
-
-	for i in ponto:		
+	for i in ponto:	
+		i.exc = False	
 		if i.tipo == 'entrada':			
 			v_entrad   = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) + timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			v_entrad_l = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) - timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			if v_entrad < timedelta(hours=i.hora.hour,minutes=i.hora.minute):
 				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute)
-				i.cor = "red"		
+				i.cor = "red"
+				i.exc = True		
 			elif v_entrad_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
 				i.banco = timedelta(hours=paramponto.entrada.hour,minutes=paramponto.entrada.minute) - timedelta(hours=i.hora.hour,minutes=i.hora.minute)
 				i.cor = "green"		
-
+				i.exc = True		
 		else:
 			v_saida   = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) + timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			v_saida_l = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) - timedelta(hours=paramponto.tolerancia.hour,minutes=paramponto.tolerancia.minute)
 			if v_saida < timedelta(hours=i.hora.hour,minutes=i.hora.minute):
 				i.banco = timedelta(hours=i.hora.hour,minutes=i.hora.minute) - timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute)
 				i.cor = "green"		
+				i.exc = True		
 			elif v_saida_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
 				i.banco = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) - timedelta(hours=i.hora.hour,minutes=i.hora.minute) 
 				i.cor = "red"		
+				i.exc = True		
 
+	#import pdb; pdb.set_trace()
 
 	args = {'ponto': ponto,
 			'periodo':periodo,
 			'paramponto': parampontoform,
-			'parampontoform': paramponto}
+			'parampontoform': paramponto,
+			'p_rs_ponto': p_rs_ponto}
 
 	return render(request, 'ponto/ponto.html', args)
 
