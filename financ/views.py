@@ -40,10 +40,12 @@ def Despesas(request):
                                       dt_vencimento__month=current.month,
                                       usuario=request.user).exclude(fixa=True)
 
-	despesas_fixa = Despesa.objects.filter(fixa=True, usuario=request.user)
+	despesas_fixa = Despesa.objects.filter(fixa=True, 
+										   usuario=request.user,
+										   dt_vencimento__lte=datetime.datetime(current.year,current.month, 1))
 	for despesa in despesas_fixa:				
 		despesa.dt_vencimento = datetime.datetime(current.year, current.month, despesa.dt_vencimento.day)		
-	for despesa in despesas:		
+	for despesa in despesas:				
 		despesas_fixa = despesas_fixa.exclude(pk=despesa.pk_fixa)
 
 	args = {'mes': mes,
@@ -115,21 +117,9 @@ def Despesa_Edit(request,pk):
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
-			despesa = form.save(commit=False)           	
-			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
-			if despesa.fixa == True:
-				Despesa.objects.create(valor		  = despesa.valor,
-									   descricao	  = despesa.descricao,
-									   dt_vencimento  = despesa.dt_vencimento,
-									   categoria	  = despesa.categoria,
-									   pago		      = despesa.pago,
-									   fixa           = False,
-									   pk_fixa        = despesa.pk,
-									   usuario        = request.user
-									   )
-
-			else:				
-				despesa.save()
+			despesa = form.save(commit=False)           				
+			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)			
+			despesa.save()
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
@@ -164,18 +154,7 @@ def Despesa_Edit_All(request,pk):
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
-			if despesa.fixa == True:
-				Despesa.objects.create(valor		  = despesa.valor,
-									   descricao	  = despesa.descricao,
-									   dt_vencimento  = despesa.dt_vencimento,
-									   categoria	  = despesa.categoria,
-									   pago		      = despesa.pago,
-									   fixa           = False,
-									   pk_fixa        = despesa.pk
-									   )
-
-			else:
-				despesa.save()
+			despesa.save()
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
