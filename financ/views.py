@@ -42,7 +42,7 @@ def Despesas(request):
 
 	despesas_fixa = Despesa.objects.filter(fixa=True, 
 										   usuario=request.user,
-										   dt_vencimento__lte=datetime.datetime(current.year,current.month, 1))
+										   dt_vencimento__lte=datetime.datetime(current.year,current.month, 1) + datetime.timedelta(35))
 	for despesa in despesas_fixa:				
 		despesa.dt_vencimento = datetime.datetime(current.year, current.month, despesa.dt_vencimento.day)		
 	for despesa in despesas:				
@@ -117,9 +117,21 @@ def Despesa_Edit(request,pk):
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
-			despesa = form.save(commit=False)           				
-			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)			
-			despesa.save()
+			despesa = form.save(commit=False)           	
+			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
+			if despesa.fixa == True:
+				Despesa.objects.create(valor		  = despesa.valor,
+									   descricao	  = despesa.descricao,
+									   dt_vencimento  = despesa.dt_vencimento,
+									   categoria	  = despesa.categoria,
+									   pago		      = despesa.pago,
+									   fixa           = False,
+									   pk_fixa        = despesa.pk,
+									   usuario        = request.user
+									   )
+
+			else:				
+				despesa.save()
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
@@ -164,7 +176,8 @@ def Despesa_Edit_All(request,pk):
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:				
-		data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
+		#data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
+		data = {}
 		form = DespesaFormView(instance=despesa,
 							   initial=data,
 							   user=request.user)       
