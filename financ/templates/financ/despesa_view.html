@@ -26,7 +26,7 @@
                             <h4 class="modal-title">Tem certeza que deseja excluir ?</h4>
                         </div>
                         <div class="modal-body">                            
-                            <a class="btn btn-default btn-del-ok"><span class="fa fa-check"></span></a>                        
+                            <a class="btn btn-default btn-del-ok" id="bt-confirm-del"><span class="fa fa-check"></span></a>                        
                             <a class="btn btn-default btn-del-cancel" data-dismiss="modal" aria-label="Close"><span class="fa fa-times"></span></a>
                         </div>                        
                     </div>
@@ -101,7 +101,20 @@
 
 <script type="text/javascript">        
 
-    
+    $('#bt-confirm-del').click(function(e) {
+        var despesa_list = [];        
+        despesa_list.push({{ despesa.pk }});
+        $.ajax({
+            url:"{% url 'financ:despesa_del' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}",
+            type: "POST",            
+            data: {despesa_lista: despesa_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success:function(response){
+            window.location.href= "{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}"
+            },
+            complete:function(){},
+            error:function (xhr, textStatus, thrownError){}
+        });        
+    });   
 
 </script>
 {% endblock javascript %}
