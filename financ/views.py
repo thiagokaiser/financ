@@ -10,6 +10,7 @@ from .forms import (
 from django.utils import timezone
 from django.contrib import messages
 from django.core import serializers
+from .funcoes import AlteraDespesasPend, BuscaDespesasMes
 import datetime
 import calendar
 import json
@@ -36,17 +37,7 @@ def Despesas(request):
 	mes['proximo']  	= next_month
 	mes['anterior'] 	= prev_month
 
-	despesas = Despesa.objects.filter(dt_vencimento__year=current.year,
-                                      dt_vencimento__month=current.month,
-                                      usuario=request.user).exclude(fixa=True)
-
-	despesas_fixa = Despesa.objects.filter(fixa=True, 
-										   usuario=request.user,
-										   dt_vencimento__lte=datetime.datetime(current.year,current.month, 1) + datetime.timedelta(35))
-	for despesa in despesas_fixa:				
-		despesa.dt_vencimento = datetime.datetime(current.year, current.month, despesa.dt_vencimento.day)		
-	for despesa in despesas:				
-		despesas_fixa = despesas_fixa.exclude(pk=despesa.pk_fixa)
+	despesas, despesas_fixa = BuscaDespesasMes(request,current.year,current.month)
 
 	args = {'mes': mes,
 	 		'despesas': despesas,
@@ -156,6 +147,7 @@ def Despesa_Edit_All(request,pk):
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
 	p_fixa   = int(request.GET.get('fixa', 0))
 	
+	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
 	despesa = get_object_or_404(Despesa, pk=pk)
 	if despesa.usuario != request.user:
@@ -164,9 +156,10 @@ def Despesa_Edit_All(request,pk):
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
-			despesa = form.save(commit=False)           	
-			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
+			despesa = form.save(commit=False)			
 			despesa.save()
+
+			AlteraDespesasPend(despesa.pk)
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')

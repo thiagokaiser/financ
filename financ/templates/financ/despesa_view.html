@@ -34,7 +34,7 @@
             </div>            
             <div class="btn-group" role="group" aria-label="...">
                 <a type="button" class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Voltar</a>                
-                {% if despesa.fixa == False and despesa.pk_fixa == 0 %}
+                {% if despesa.fixa == False and despesa.pk_fixa == 0 or despesa.pago == True %}
                     <a type="button" class="btn btn-default" href="{% url 'financ:despesa_edit' pk=despesa.pk %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}">Editar</a>
                     <a type="button" class="btn btn-default" href="" data-toggle="modal" data-target="#div-del">Deletar</a>
 
