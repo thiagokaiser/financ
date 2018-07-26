@@ -10,7 +10,7 @@ from .forms import (
 from django.utils import timezone
 from django.contrib import messages
 from django.core import serializers
-from .funcoes import AlteraDespesasPend, BuscaDespesasMes
+from .funcoes import AlteraDespesasPend, BuscaDespesasMes, EliminaDespesa
 import datetime
 import calendar
 import json
@@ -186,19 +186,9 @@ def Despesa_Del(request):
 	p_fixa   = int(request.GET.get('fixa', 0))	
 
 	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
+	
+	EliminaDespesa(request,url)            
 
-	if request.POST and request.is_ajax():        
-		if request.POST.getlist('despesa_lista[]'):
-			despesa_list = request.POST.getlist('despesa_lista[]')            
-			for i in despesa_list:
-				despesa = Despesa.objects.get(pk=i)
-				if despesa.usuario != request.user:
-					messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-					return redirect('financ:despesas' + url)
-				despesa.delete()            
-			messages.success(request, "Despesas excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
-		else:
-			messages.error(request, "Nenhuma despesa selecionada.", extra_tags='alert-error alert-dismissible')               
 	return HttpResponse('')	
 
 def Despesa_Del_All(request):
@@ -208,18 +198,8 @@ def Despesa_Del_All(request):
 
 	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
-	if request.POST and request.is_ajax():        
-		if request.POST.getlist('despesa_lista[]'):
-			despesa_list = request.POST.getlist('despesa_lista[]')            
-			for i in despesa_list:
-				despesa = Despesa.objects.get(pk=i)
-				if despesa.usuario != request.user:
-					messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-					return redirect('financ:despesas' + url)
-				despesa.delete()            
-			messages.success(request, "Despesas excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
-		else:
-			messages.error(request, "Nenhuma despesa selecionada.", extra_tags='alert-error alert-dismissible')               
+	EliminaDespesa(request,url)
+	
 	return HttpResponse('')	
 
 def Categoria_Add(request):

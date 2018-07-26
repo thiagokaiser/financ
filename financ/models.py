@@ -11,6 +11,7 @@ class Despesa(models.Model):
 	fixa            = models.BooleanField(default=False)
 	pk_fixa         = models.IntegerField(blank=True, default=0)
 	usuario         = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	eliminada       = models.BooleanField(default=False)
 	def __str__(self):
 		return self.descricao
 

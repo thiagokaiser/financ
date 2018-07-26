@@ -1,4 +1,5 @@
 from .models import Despesa
+from django.contrib import messages
 import datetime
 
 def AlteraDespesasPend(chave):	
@@ -28,4 +29,22 @@ def BuscaDespesasMes(request,ano,mes):
 	for despesa in despesas:				
 		despesas_fixa = despesas_fixa.exclude(pk=despesa.pk_fixa)
 		
+	despesas = despesas.exclude(eliminada=True)
+
 	return despesas, despesas_fixa
+
+
+def EliminaDespesa(request, url):
+	if request.POST and request.is_ajax():        
+		if request.POST.getlist('despesa_lista[]'):
+			despesa_list = request.POST.getlist('despesa_lista[]')            
+			for i in despesa_list:
+				despesa = Despesa.objects.get(pk=i)
+				if despesa.usuario != request.user:
+					messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+					return redirect('financ:despesas' + url)
+				despesa.delete()            
+			messages.success(request, "Despesas excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
+		else:
+			messages.error(request, "Nenhuma despesa selecionada.", extra_tags='alert-error alert-dismissible')   
+
