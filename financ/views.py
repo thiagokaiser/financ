@@ -62,16 +62,19 @@ def Despesa_Add(request):
 		p_fixa    = bool(request.POST.get('id_repetir'))
 		qtd_meses = int(request.POST.get('id_meses'))
 
-		form = DespesaFormView(request.POST)
+		form = DespesaFormView(request.POST, user=request.user)
 
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
 			despesa.fixa = p_fixa
-			despesa.usuario = request.user			
+			despesa.usuario = request.user						
+			if despesa.fixa == True:				
+				despesa.parcela = '1/' + str(qtd_meses)
 			despesa.save()       			   
 			if despesa.fixa == True:
 				AdicionaDespesa(despesa,qtd_meses)  
+				
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
 
@@ -135,7 +138,7 @@ def Despesa_Edit(request,pk):
 							   initial=data,
 							   user=request.user)       		
 
-	args = {'form': form, 'despesa': despesa}    
+	args = {'form': form, 'despesa': despesa, 'param': ''}    
 	return render(request, 'financ/despesa_edit.html', args)
 
 def Despesa_Edit_All(request,pk):
@@ -156,6 +159,8 @@ def Despesa_Edit_All(request,pk):
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
 			despesa.save()
 
+			AlteraDespesasPend(despesa)
+
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
 
@@ -169,7 +174,7 @@ def Despesa_Edit_All(request,pk):
 							   initial=data,
 							   user=request.user)       		
 
-	args = {'form': form, 'despesa': despesa}    
+	args = {'form': form, 'despesa': despesa, 'param': 'all'}    
 	return render(request, 'financ/despesa_edit.html', args)
 
 def Despesa_Del(request):
@@ -179,7 +184,7 @@ def Despesa_Del(request):
 
 	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 	
-	EliminaDespesa(request,url)            
+	EliminaDespesa(request,1)            
 
 	return HttpResponse('')	
 
@@ -190,7 +195,7 @@ def Despesa_Del_All(request):
 
 	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
-	EliminaDespesa(request,url)
+	EliminaDespesa(request,2)
 	
 	return HttpResponse('')	
 

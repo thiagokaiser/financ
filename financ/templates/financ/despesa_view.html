@@ -32,6 +32,23 @@
                     </div>
                 </div>
             </div>            
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-del-all">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Tem certeza que deseja excluir todas despesas pendentes ?</h4>
+                        </div>
+                        <div class="modal-body">                            
+                            <a class="btn btn-default btn-del-ok" id="bt-confirm-del-all"><span class="fa fa-check"></span></a>                        
+                            <a class="btn btn-default btn-del-cancel" data-dismiss="modal" aria-label="Close"><span class="fa fa-times"></span></a>
+                        </div>                        
+                    </div>
+                </div>
+            </div>            
             <div class="btn-group" role="group" aria-label="...">
                 <a type="button" class="btn btn-default" href="{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}">Voltar</a>                
                 {% if despesa.fixa == False and despesa.pk_fixa == 0 or despesa.pago == True %}
@@ -59,7 +76,7 @@
                                 <a href="" data-toggle="modal" data-target="#div-del">Somente esta</a>
                             </li>
                             <li>
-                                <a href="" data-toggle="modal" data-target="#div-del">Todas não pagas</a>
+                                <a href="" data-toggle="modal" data-target="#div-del-all">Todas não pagas</a>
                             </li>                    
                         </ul>
                     </div>
@@ -106,6 +123,21 @@
         despesa_list.push({{ despesa.pk }});
         $.ajax({
             url:"{% url 'financ:despesa_del' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}",
+            type: "POST",            
+            data: {despesa_lista: despesa_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success:function(response){
+            window.location.href= "{% url 'financ:despesas' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}"
+            },
+            complete:function(){},
+            error:function (xhr, textStatus, thrownError){}
+        });        
+    });   
+
+    $('#bt-confirm-del-all').click(function(e) {
+        var despesa_list = [];        
+        despesa_list.push({{ despesa.pk_fixa }});
+        $.ajax({
+            url:"{% url 'financ:despesa_del_all' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}",
             type: "POST",            
             data: {despesa_lista: despesa_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
             success:function(response){

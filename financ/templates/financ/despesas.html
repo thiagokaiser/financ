@@ -88,7 +88,7 @@
                                 <td data-order="{{ despesa.pago }}"><i {% if despesa.pago == False %} class="fa fa-times" style="color:red" {% else %} class="fa fa-check" style="color:#41db53"{% endif %}></i></td>
                                 <td class="colunatable"> {{ despesa.descricao }}</td>                                                        
                                 <td class="colunatable"><i class="fa fa-circle" style="color: {{ despesa.categoria.cor }}"></i> {{ despesa.categoria.descricao }}</td>
-                                <td class="colunatable"> {% if despesa.pk_fixa  != False %} Fixo {% endif %}   </td>
+                                <td class="colunatable"> {{ despesa.parcela }} </td>
                                 <td class="colunatable"><span style="display: none;">{{ despesa.dt_vencimento|date:"Ymd" }}</span>{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
                                 <td class="colunatable" data-order="{% load l10n %}{{ despesa.valor|unlocalize }}">{{ despesa.valor }}</td>                                                
                             </tr>                

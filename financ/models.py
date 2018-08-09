@@ -12,6 +12,7 @@ class Despesa(models.Model):
 	pk_fixa         = models.IntegerField(blank=True, default=0)
 	usuario         = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	eliminada       = models.BooleanField(default=False)
+	parcela         = models.CharField(max_length=10, blank=True)		
 	def __str__(self):
 		return self.descricao
 

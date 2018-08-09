@@ -33,7 +33,10 @@
 
 <script type="text/javascript">        
 
-    
+    {% if param == 'all' %}
+        $("#id_dt_vencimento").prop("disabled", true);
+        $("#id_pago").prop("disabled", true);        
+    {% endif %}
 
 </script>
 {% endblock javascript %}
