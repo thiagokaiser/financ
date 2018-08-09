@@ -19,20 +19,9 @@ def AlteraDespesasPend(chave):
 def BuscaDespesasMes(request,ano,mes):
 	despesas = Despesa.objects.filter(dt_vencimento__year=ano,
                                       dt_vencimento__month=mes,
-                                      usuario=request.user).exclude(fixa=True)
+                                      usuario=request.user)
 
-	despesas_fixa = Despesa.objects.filter(fixa=True, 
-										   usuario=request.user,
-										   dt_vencimento__lte=datetime.datetime(ano,mes, 1) + datetime.timedelta(35))
-	for despesa in despesas_fixa:				
-		despesa.dt_vencimento = datetime.datetime(ano, mes, despesa.dt_vencimento.day)		
-	for despesa in despesas:				
-		despesas_fixa = despesas_fixa.exclude(pk=despesa.pk_fixa)
-		
-	despesas = despesas.exclude(eliminada=True)
-
-	return despesas, despesas_fixa
-
+	return despesas
 
 def EliminaDespesa(request, url):
 	if request.POST and request.is_ajax():        
@@ -48,3 +37,24 @@ def EliminaDespesa(request, url):
 		else:
 			messages.error(request, "Nenhuma despesa selecionada.", extra_tags='alert-error alert-dismissible')   
 
+
+def AdicionaDespesa(despesa,qtd_meses):
+	i = 1
+	dt_vencimento = despesa.dt_vencimento
+	while i < qtd_meses:
+
+		dt_vencimento = datetime.datetime(dt_vencimento.year, dt_vencimento.month + 1, dt_vencimento.day) 
+
+		Despesa.objects.create(valor		  = despesa.valor,
+							   descricao	  = despesa.descricao + str(qtd_meses),
+							   dt_vencimento  = dt_vencimento,
+							   categoria	  = despesa.categoria,
+							   pago		      = False,
+							   fixa           = False,
+							   pk_fixa        = despesa.pk,
+							   usuario        = despesa.usuario
+							   )
+		i = i + 1
+
+def EditaDespesa(request,despesa,tipo):
+	pass

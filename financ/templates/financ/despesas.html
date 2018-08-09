@@ -92,17 +92,7 @@
                                 <td class="colunatable"><span style="display: none;">{{ despesa.dt_vencimento|date:"Ymd" }}</span>{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
                                 <td class="colunatable" data-order="{% load l10n %}{{ despesa.valor|unlocalize }}">{{ despesa.valor }}</td>                                                
                             </tr>                
-                            {% endfor %}
-                            {% for despesa_fixa in despesas_fixa %}                                        
-                            <tr id="{{ despesa_fixa.pk }}" >
-                                <td data-order="{{ despesa_fixa.pago }}"><i {% if despesa_fixa.pago == False %} class="fa fa-times" style="color:red" {% else %} class="fa fa-check" style="color:#41db53"{% endif %}></i></td>
-                                <td class="colunatable"> {{ despesa_fixa.descricao }}</td>                                                        
-                                <td class="colunatable"><i class="fa fa-circle" style="color: {{ despesa_fixa.categoria.cor }}"></i> {{ despesa_fixa.categoria.descricao }}</td>
-                                <td class="colunatable"> {% if despesa_fixa.fixa == True %} Fixo {% endif %}   </td>
-                                <td class="colunatable"><span style="display: none;">{{ despesa_fixa.dt_vencimento|date:"Ymd" }}</span>{{ despesa_fixa.dt_vencimento|date:"j/b/Y" }}</td>                        
-                                <td class="colunatable" data-order="{% load l10n %}{{ despesa_fixa.valor|unlocalize }}">{{ despesa_fixa.valor }}</td>
-                            </tr>                
-                            {% endfor %}
+                            {% endfor %}                            
 
                         </tbody>
 

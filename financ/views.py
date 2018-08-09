@@ -10,7 +10,13 @@ from .forms import (
 from django.utils import timezone
 from django.contrib import messages
 from django.core import serializers
-from .funcoes import AlteraDespesasPend, BuscaDespesasMes, EliminaDespesa
+from .despesa import (
+	AlteraDespesasPend,
+	BuscaDespesasMes,
+	EliminaDespesa,
+	EditaDespesa,
+	AdicionaDespesa,
+	)
 import datetime
 import calendar
 import json
@@ -37,11 +43,11 @@ def Despesas(request):
 	mes['proximo']  	= next_month
 	mes['anterior'] 	= prev_month
 
-	despesas, despesas_fixa = BuscaDespesasMes(request,current.year,current.month)
+	despesas = BuscaDespesasMes(request,current.year,current.month)
 
 	args = {'mes': mes,
-	 		'despesas': despesas,
-	 		'despesas_fixa': despesas_fixa,}
+	 		'despesas': despesas
+	 		}
 
 	return render(request, 'financ/despesas.html', args)
 
@@ -53,23 +59,26 @@ def Despesa_Add(request):
 	mes['atual'] = current
 
 	if request.method == 'POST':
-
-		p_fixa    = bool(request.POST.get('id_fixo'))
+		p_fixa    = bool(request.POST.get('id_repetir'))
+		qtd_meses = int(request.POST.get('id_meses'))
 
 		form = DespesaFormView(request.POST)
+
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
 			despesa.fixa = p_fixa
 			despesa.usuario = request.user			
-			despesa.save()       			     
+			despesa.save()       			   
+			if despesa.fixa == True:
+				AdicionaDespesa(despesa,qtd_meses)  
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
 
 			response['Location'] += url
 			return response
 		else:
-			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               		
 	else:
 		form = DespesaFormView(user=request.user)
 
@@ -98,31 +107,20 @@ def Despesa_View(request,pk):
 def Despesa_Edit(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	p_fixa   = int(request.GET.get('fixa', 0))
-	
+	p_fixa   = int(request.GET.get('fixa', 0))	
+	url      = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
 	despesa = get_object_or_404(Despesa, pk=pk)
 	if despesa.usuario != request.user:
 		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
 		return redirect('financ:despesas')
+
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
 			despesa = form.save(commit=False)           	
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
-			if despesa.fixa == True:
-				Despesa.objects.create(valor		  = despesa.valor,
-									   descricao	  = despesa.descricao,
-									   dt_vencimento  = despesa.dt_vencimento,
-									   categoria	  = despesa.categoria,
-									   pago		      = despesa.pago,
-									   fixa           = False,
-									   pk_fixa        = despesa.pk,
-									   usuario        = request.user
-									   )
-
-			else:				
-				despesa.save()
+			despesa.save()
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
@@ -132,34 +130,31 @@ def Despesa_Edit(request,pk):
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:				
-		data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
+		data = {}		
 		form = DespesaFormView(instance=despesa,
 							   initial=data,
-							   user=request.user)       
-		
+							   user=request.user)       		
 
 	args = {'form': form, 'despesa': despesa}    
-
 	return render(request, 'financ/despesa_edit.html', args)
 
 def Despesa_Edit_All(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	p_fixa   = int(request.GET.get('fixa', 0))
-	
-	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
+	p_fixa   = int(request.GET.get('fixa', 0))	
+	url      = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
 	despesa = get_object_or_404(Despesa, pk=pk)
 	if despesa.usuario != request.user:
 		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
 		return redirect('financ:despesas')
+
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
 		if form.is_valid():  
-			despesa = form.save(commit=False)			
+			despesa = form.save(commit=False)           	
+			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
 			despesa.save()
-
-			AlteraDespesasPend(despesa.pk)
 
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
 			response = redirect('financ:despesas')
@@ -169,15 +164,12 @@ def Despesa_Edit_All(request,pk):
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:				
-		#data = {'dt_vencimento': datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)}		
-		data = {}
+		data = {}		
 		form = DespesaFormView(instance=despesa,
 							   initial=data,
-							   user=request.user)       
-		
+							   user=request.user)       		
 
 	args = {'form': form, 'despesa': despesa}    
-
 	return render(request, 'financ/despesa_edit.html', args)
 
 def Despesa_Del(request):
