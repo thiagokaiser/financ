@@ -120,7 +120,7 @@
 
     $('#bt-confirm-del').click(function(e) {
         var despesa_list = [];        
-        despesa_list.push({{ despesa.pk }});
+        despesa_list.push({{ despesa.pk|stringformat:"0.f" }});
         $.ajax({
             url:"{% url 'financ:despesa_del' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}",
             type: "POST",            
@@ -135,7 +135,7 @@
 
     $('#bt-confirm-del-all').click(function(e) {
         var despesa_list = [];        
-        despesa_list.push({{ despesa.pk_fixa }});
+        despesa_list.push({{ despesa.pk_fixa|stringformat:"0.f" }});
         $.ajax({
             url:"{% url 'financ:despesa_del_all' %}?year={{ despesa.dt_vencimento|date:"Y"  }}&month={{ despesa.dt_vencimento|date:"m" }}",
             type: "POST",            

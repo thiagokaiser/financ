@@ -34,8 +34,8 @@
 <script type="text/javascript">        
 
     {% if param == 'all' %}
-        $("#id_dt_vencimento").prop("disabled", true);
-        $("#id_pago").prop("disabled", true);        
+        $("#id_dt_vencimento").prop("readonly", true);        
+        $("#id_pago").closest("tr").hide()  
     {% endif %}
 
 </script>

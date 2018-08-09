@@ -60,7 +60,14 @@ def Despesa_Add(request):
 
 	if request.method == 'POST':
 		p_fixa    = bool(request.POST.get('id_repetir'))
-		qtd_meses = int(request.POST.get('id_meses'))
+		
+		p_qtd_meses = request.POST.get('id_meses')
+		if p_qtd_meses != '':
+			qtd_meses = int(p_qtd_meses)
+			if qtd_meses > 99:
+				qtd_meses = 99
+		else:
+			qtd_meses = 2		
 
 		form = DespesaFormView(request.POST, user=request.user)
 

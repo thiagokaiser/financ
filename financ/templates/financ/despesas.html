@@ -49,21 +49,21 @@
                                 <option value="12">Dezembro</option>
                             </select>
                             
-                            <select class="ano selectpicker show-tick" data-size="8" data-width="fit">
-                                <option value="2007">2007</option>
-                                <option value="2008">2008</option>
-                                <option value="2009">2009</option>
-                                <option value="2010">2010</option>
-                                <option value="2011">2011</option>
-                                <option value="2012">2012</option>
-                                <option value="2013">2013</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
+                            <select class="ano selectpicker show-tick" data-size="8" data-width="fit">                                
                                 <option value="2017">2017</option>
                                 <option value="2018">2018</option>
                                 <option value="2019">2019</option>
-                            </select>                                    
+                                <option value="2020">2020</option>
+                            </select>    
+                            <!--
+                            <input type="text" list="cars" />
+                            <datalist id="cars">
+                              <option>Volvo</option>
+                              <option>Saab</option>
+                              <option>Mercedes</option>
+                              <option>Audi</option>
+                            </datalist>
+                            -->
                             <a class="btn btn-default btn-mes-ok"><span class="fa fa-check"></span></a>                        
                         </div>                        
                     </div>
@@ -84,7 +84,7 @@
                         </thead>
                         <tbody>
                             {% for despesa in despesas %}                                        
-                            <tr id="{{ despesa.pk }}" >
+                            <tr id="{{ despesa.pk|stringformat:"0.f" }}" >
                                 <td data-order="{{ despesa.pago }}"><i {% if despesa.pago == False %} class="fa fa-times" style="color:red" {% else %} class="fa fa-check" style="color:#41db53"{% endif %}></i></td>
                                 <td class="colunatable"> {{ despesa.descricao }}</td>                                                        
                                 <td class="colunatable"><i class="fa fa-circle" style="color: {{ despesa.categoria.cor }}"></i> {{ despesa.categoria.descricao }}</td>
@@ -113,7 +113,7 @@
 <script type="text/javascript" src="{% static 'app/plugins/datatables/dataTables.bootstrap.min.js'  %}"></script>
 
 <script type="text/javascript">
-
+    
     $(document).ready(function(){                
         $('#table_despesa').DataTable({
           "paging": false,
@@ -125,7 +125,7 @@
           "dom": '<"top"i>rt<"bottom"flp><"clear">'
         });
     });
-
+    
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
         window.location.href = "view/" + chave + "/?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}";
