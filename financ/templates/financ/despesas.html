@@ -29,10 +29,8 @@
                             <h4 class="modal-title">Selecione um periodo:</h4>
                         </div>
                         <div class="modal-body">
-                            
                             <input type="date" id="data_ini" name="data_ini">
-                            <input type="date" id="data_fim" name="data_fim">
-                            
+                            <input type="date" id="data_fim" name="data_fim">                            
                             <br><br>
                             <a class="btn btn-default" id="btn_xls">Exporta XLS</span></a>                        
                         </div>                        
@@ -161,6 +159,10 @@
           "autoWidth": false,  
           "dom": '<"top"i>rt<"bottom"flp><"clear">'
         });
+
+        $('#data_ini').val('{{ mes.atual|date:"Y-m-d" }}');
+        $('#data_fim').val('{{ mes.ultdia|date:"Y-m-d" }}');
+
     });
     
     $(".colunatable").click(function(e) {
@@ -168,13 +170,13 @@
         window.location.href = "view/" + chave + "/?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}";
     });        
     $(".btn-mes-ok").click(function(e) {                
-        v_ano = $('.ano').selectpicker('val')
-        v_mes = $('.mes').selectpicker('val')        
+        v_ano = $('.ano').selectpicker('val');
+        v_mes = $('.mes').selectpicker('val');
         window.location.href = "{% url 'financ:despesas' %}?year=" + v_ano + "&month=" + v_mes;
     });        
     $("#btn_xls").click(function(e) {                
-        data_ini = $('#data_ini').val()
-        data_fim = $('#data_fim').val()
+        data_ini = $('#data_ini').val();
+        data_fim = $('#data_fim').val();
         window.location.href = "{% url 'financ:gera_xls_mes' %}?data_ini=" + data_ini + "&data_fim=" + data_fim;
     });        
 

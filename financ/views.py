@@ -43,6 +43,7 @@ def Despesas(request):
 	mes['atual']        = current
 	mes['proximo']  	= next_month
 	mes['anterior'] 	= prev_month
+	mes['ultdia']       = next_month - datetime.timedelta(days=1)
 
 	despesas, totais = BuscaDespesasMes(request,current.year,current.month)
 
@@ -289,18 +290,22 @@ def Categoria_Del(request):
     return HttpResponse('')
 
 def Gera_XLS_Mes(request):
-	data_ini    = request.GET.get('data_ini', datetime.datetime.today())
-	data_fim    = request.GET.get('data_fim', datetime.datetime.today())
+	p_data_ini    = request.GET.get('data_ini')
+	p_data_fim    = request.GET.get('data_fim')
 
-	return HttpResponse(str(data_ini + data_fim))
-	"""
-    despesas = Despesa.objects.filter(dt_vencimento__year=ano,
-                                      dt_vencimento__month=mes,
-                                      usuario=request.user)	
+	try:		
+		data_ini = datetime.datetime(int(p_data_ini[:4]), int(p_data_ini[5:7]), int(p_data_ini[8:10]))
+		data_fim = datetime.datetime(int(p_data_fim[:4]), int(p_data_fim[5:7]), int(p_data_fim[8:10]))
+	except:
+		messages.error(request, "Data inválida.", extra_tags='alert-error alert-dismissible')    
+		return redirect('financ:despesas')	
 
-    response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=despesas' + str(ano) + str(mes) + '.xlsx'
-    xlsx_data = GeraExcel(despesas)
-    response.write(xlsx_data)
-    return response
-    """
+	despesas = Despesa.objects.filter(dt_vencimento__gte=data_ini,
+                                      dt_vencimento__lte=data_fim,
+                                      usuario=request.user)
+
+	response = HttpResponse(content_type='application/vnd.ms-excel')
+	response['Content-Disposition'] = 'attachment; filename=despesas' + str(data_ini.date()) + "to" + str(data_fim.date()) + '.xlsx'
+	xlsx_data = GeraExcel(despesas)
+	response.write(xlsx_data)
+	return response
