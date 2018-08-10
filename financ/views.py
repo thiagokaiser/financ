@@ -43,11 +43,11 @@ def Despesas(request):
 	mes['proximo']  	= next_month
 	mes['anterior'] 	= prev_month
 
-	despesas = BuscaDespesasMes(request,current.year,current.month)
+	despesas, totais = BuscaDespesasMes(request,current.year,current.month)
 
 	args = {'mes': mes,
-	 		'despesas': despesas
-	 		}
+	 		'despesas': despesas,
+	 		'totais': totais}
 
 	return render(request, 'financ/despesas.html', args)
 

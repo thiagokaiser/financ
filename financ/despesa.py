@@ -1,5 +1,6 @@
 from .models import Despesa
 from django.contrib import messages
+from django.db.models import Sum
 import datetime
 
 def AlteraDespesasPend(despesa):		
@@ -14,9 +15,27 @@ def AlteraDespesasPend(despesa):
 def BuscaDespesasMes(request,ano,mes):
 	despesas = Despesa.objects.filter(dt_vencimento__year=ano,
                                       dt_vencimento__month=mes,
-                                      usuario=request.user)
+                                      usuario=request.user)	
 
-	return despesas
+	pago = Despesa.objects.filter(dt_vencimento__year=ano,
+                                   dt_vencimento__month=mes,
+                                   usuario=request.user,
+                                   pago=True).aggregate(Sum("valor"))
+
+	pendente = Despesa.objects.filter(dt_vencimento__year=ano,
+                                   dt_vencimento__month=mes,
+                                   usuario=request.user,
+                                   pago=False).aggregate(Sum("valor"))
+
+
+	total = float(pago['valor__sum'] or 0) + float(pendente['valor__sum'] or 0)
+
+	totais = {'pago': float(pago['valor__sum'] or 0),
+			  'pendente': float(pendente['valor__sum'] or 0),
+			  'total': total}
+
+
+	return despesas, totais
 
 def EliminaDespesa(request, param):
 	if request.POST and request.is_ajax():        
