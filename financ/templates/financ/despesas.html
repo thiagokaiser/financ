@@ -99,20 +99,26 @@
                         <thead>
                             <th>Pago?</th>
                             <th>Despesa</th>
-                            <th>Categoria</th>
-                            <th>Parcela</th>
-                            <th>Vencimento</th>
+                            <th class="hidden-xs">Categoria</th>
+                            <th class="hidden-xs">Parcela</th>
+                            <th class="hidden-xs">Vencimento</th>
                             <th>Valor</th>                    
+                            <th class="visible-xs">Categoria</th>
+                            <th class="visible-xs">Parcela</th>
+                            <th class="visible-xs">Vencimento</th>
                         </thead>
                         <tbody>
                             {% for despesa in despesas %}                                        
                             <tr id="{{ despesa.pk|stringformat:"0.f" }}" >
                                 <td data-order="{{ despesa.pago }}"><i {% if despesa.pago == False %} class="fa fa-times" style="color:red" {% else %} class="fa fa-check" style="color:#41db53"{% endif %}></i></td>
                                 <td class="colunatable"> {{ despesa.descricao }}</td>                                                        
-                                <td class="colunatable"><i class="fa fa-circle" style="color: {{ despesa.categoria.cor }}"></i> {{ despesa.categoria.descricao }}</td>
-                                <td class="colunatable"> {{ despesa.parcela }} </td>
-                                <td class="colunatable"><span style="display: none;">{{ despesa.dt_vencimento|date:"Ymd" }}</span>{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
-                                <td class="colunatable" data-order="{% load l10n %}{{ despesa.valor|unlocalize }}">{{ despesa.valor }}</td>                                                
+                                <td class="colunatable hidden-xs"><i class="fa fa-circle" style="color: {{ despesa.categoria.cor }}"></i> {{ despesa.categoria.descricao }}</td>
+                                <td class="colunatable hidden-xs"> {{ despesa.parcela }} </td>
+                                <td class="colunatable hidden-xs"><span style="display: none;">{{ despesa.dt_vencimento|date:"Ymd" }}</span>{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                        
+                                <td class="colunatable" data-order="{% load l10n %}{{ despesa.valor|unlocalize }}">{{ despesa.valor }}</td>
+                                <td class="colunatable visible-xs"><i class="fa fa-circle" style="color: {{ despesa.categoria.cor }}"></i> {{ despesa.categoria.descricao }}</td>
+                                <td class="colunatable visible-xs"> {{ despesa.parcela }} </td>
+                                <td class="colunatable visible-xs"><span style="display: none;">{{ despesa.dt_vencimento|date:"Ymd" }}</span>{{ despesa.dt_vencimento|date:"j/b/Y" }}</td>                                                                        
                             </tr>                
                             {% endfor %}                            
 
