@@ -16,6 +16,7 @@ from .despesa import (
 	EliminaDespesa,
 	EditaDespesa,
 	AdicionaDespesa,
+	GeraExcel
 	)
 import datetime
 import calendar
@@ -286,3 +287,14 @@ def Categoria_Del(request):
             messages.error(request, "Nenhuma mensagem selecionada.", extra_tags='alert-error alert-dismissible')               
 
     return HttpResponse('')
+
+def Gera_XLS_Mes(request,ano,mes):
+    despesas = Despesa.objects.filter(dt_vencimento__year=ano,
+                                      dt_vencimento__month=mes,
+                                      usuario=request.user)	
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=despesas' + str(ano) + str(mes) + '.xlsx'
+    xlsx_data = GeraExcel(despesas)
+    response.write(xlsx_data)
+    return response

@@ -16,6 +16,7 @@
     <div class="box box-default">            
         <div class="box-body">             
             <a class="btn btn-default" href="{% url 'financ:despesa_add' %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}"><span class="fa fa-plus-circle"></span></a>
+            <a class="btn btn-default" href="{% url 'financ:gera_xls_mes' ano=mes.atual|date:"Y" mes=mes.atual|date:"m" %}"><span class="fa fa-file-excel-o"></span></a>
 
             <p></p>
 
