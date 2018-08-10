@@ -15,8 +15,31 @@
     <!-- Your Page Content Here -->                    
     <div class="box box-default">            
         <div class="box-body">             
-            <a class="btn btn-default" href="{% url 'financ:despesa_add' %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}"><span class="fa fa-plus-circle"></span></a>
-            <a class="btn btn-default" href="{% url 'financ:gera_xls_mes' ano=mes.atual|date:"Y" mes=mes.atual|date:"m" %}"><span class="fa fa-file-excel-o"></span></a>
+            <a class="btn btn-default" href="{% url 'financ:despesa_add' %}?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}"><span class="fa fa-plus-circle"></span></a>            
+            <a class="btn btn-default" data-toggle="modal" data-target="#div-btn-xls"><span class="fa fa-file-excel-o"></span></a>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-xls">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Selecione um periodo:</h4>
+                        </div>
+                        <div class="modal-body">
+                            
+                            <input type="date" id="data_ini" name="data_ini">
+                            <input type="date" id="data_fim" name="data_fim">
+                            
+                            <br><br>
+                            <a class="btn btn-default" id="btn_xls">Exporta XLS</span></a>                        
+                        </div>                        
+                    </div>
+                </div>
+            </div>            
+
 
             <p></p>
 
@@ -149,6 +172,12 @@
         v_mes = $('.mes').selectpicker('val')        
         window.location.href = "{% url 'financ:despesas' %}?year=" + v_ano + "&month=" + v_mes;
     });        
+    $("#btn_xls").click(function(e) {                
+        data_ini = $('#data_ini').val()
+        data_fim = $('#data_fim').val()
+        window.location.href = "{% url 'financ:gera_xls_mes' %}?data_ini=" + data_ini + "&data_fim=" + data_fim;
+    });        
+
     $('.mes').val('{{ mes.atual|date:"m" }}'); 
     $('.ano').val('{{ mes.atual|date:"Y" }}');      
 

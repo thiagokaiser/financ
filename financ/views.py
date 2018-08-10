@@ -288,7 +288,12 @@ def Categoria_Del(request):
 
     return HttpResponse('')
 
-def Gera_XLS_Mes(request,ano,mes):
+def Gera_XLS_Mes(request):
+	data_ini    = request.GET.get('data_ini', datetime.datetime.today())
+	data_fim    = request.GET.get('data_fim', datetime.datetime.today())
+
+	return HttpResponse(str(data_ini + data_fim))
+	"""
     despesas = Despesa.objects.filter(dt_vencimento__year=ano,
                                       dt_vencimento__month=mes,
                                       usuario=request.user)	
@@ -298,3 +303,4 @@ def Gera_XLS_Mes(request,ano,mes):
     xlsx_data = GeraExcel(despesas)
     response.write(xlsx_data)
     return response
+    """
