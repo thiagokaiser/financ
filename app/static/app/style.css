@@ -51,7 +51,5 @@
 
 .loading-modal{
   text-align: center;
-  vertical-align: middle;
-  display: inline-block;  
-  padding-top: 40px;
+  vertical-align: middle;    
 }
