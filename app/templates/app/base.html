@@ -274,6 +274,11 @@
         <script type="text/javascript" src="{% static 'app/bootstrap-confirmation/bootstrap-confirmation.js' %}" ></script>                
 
         <script type="text/javascript">
+            $('#loadingdiv').modal();
+            $(window).on('load', function(){ 
+                $('#loadingdiv').modal("hide"); 
+            });                          
+
             $(".fecha-msg").click(function(e){    
                 $(".mensagem").remove();
             });
