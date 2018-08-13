@@ -149,7 +149,7 @@
 <script type="text/javascript" src="{% static 'app/plugins/datatables/dataTables.bootstrap.min.js'  %}"></script>
 
 <script type="text/javascript">    
-    
+       
     $(document).ready(function(){                
         $('#table_despesa').DataTable({
           "paging": false,
@@ -162,10 +162,9 @@
         });
 
         $('#data_ini').val('{{ mes.atual|date:"Y-m-d" }}');
-        $('#data_fim').val('{{ mes.ultdia|date:"Y-m-d" }}');        
-        $('#loadingdiv').modal();    
+        $('#data_fim').val('{{ mes.ultdia|date:"Y-m-d" }}');                
     });
-    
+        
     $(".colunatable").click(function(e) {
         chave = $(this).closest("tr").attr("id")
         window.location.href = "view/" + chave + "/?year={{ mes.atual|date:"Y"  }}&month={{ mes.atual|date:"m" }}";

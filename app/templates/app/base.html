@@ -290,6 +290,15 @@
                 });                
             });
 
+            $(document).on({
+                ajaxStart: function () {                                
+                    $('#loadingdiv').modal(); 
+                },
+                ajaxStop: function() {
+                  $('#loadingdiv').modal("hide"); 
+                }
+            });
+
         </script>
         {% block javascript %}
 
