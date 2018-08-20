@@ -21,7 +21,7 @@ from .despesa import (
 import datetime
 import calendar
 import json
-import time
+#import time
 
 #import pdb; pdb.set_trace()
 
@@ -305,10 +305,10 @@ def Gera_XLS_Mes(request):
                                       dt_vencimento__lte=data_fim,
                                       usuario=request.user)
 
-	time.sleep(3)
+	#time.sleep(3)
 
 	response = HttpResponse(content_type='application/vnd.ms-excel')
-	response['Set-Cookie'] = "fileDownload=true; path=/"
+	#response['Set-Cookie'] = "fileDownload=true; path=/"
 	response['Content-Disposition'] = 'attachment; filename=despesas' + str(data_ini.date()) + "to" + str(data_fim.date()) + '.xlsx'
 
 

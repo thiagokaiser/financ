@@ -175,14 +175,14 @@
         window.location.href = "{% url 'financ:despesas' %}?year=" + v_ano + "&month=" + v_mes;
     });        
     $("#btn_xls").click(function(e) {      
-        $('#loadingdiv').modal();           
+        //$('#loadingdiv').modal();           
         data_ini = $('#data_ini').val();
         data_fim = $('#data_fim').val();
         //window.location.href = "{% url 'financ:gera_xls_mes' %}?data_ini=" + data_ini + "&data_fim=" + data_fim;
         url = "{% url 'financ:gera_xls_mes' %}?data_ini=" + data_ini + "&data_fim=" + data_fim;
-        //window.open(url);
+        window.open(url);
                  
-
+        /*
         $.fileDownload(url, {
             successCallback: function (url) {
          
@@ -192,7 +192,7 @@
                 $('#loadingdiv').modal("hide");                    
                 alert('Your file download just failed for this URL:' + url);
             }
-        });
+        });*/
         /*
         $.ajax({
             url:"{% url 'financ:gera_xls_mes' %}?data_ini=" + data_ini + "&data_fim=" + data_fim,
