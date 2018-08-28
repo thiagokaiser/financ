@@ -1,10 +1,88 @@
-from .models import Despesa
+from .models import Despesa, Categoria
 from django.contrib import messages
 from django.db.models import Sum
 from io import StringIO, BytesIO
 import datetime
 import xlsxwriter
 from decimal import *
+import itertools
+#import pdb; pdb.set_trace()
+
+def funcao_data(i):
+    array = []
+    dt = datetime.datetime.today()
+    array.append(dt)
+    while i > 0:
+        prev = dt.replace(day=1) - datetime.timedelta(days=1)
+        dt = prev        
+        array.append(prev)
+        i = i - 1
+    return array
+
+def HomeDespesa(request,data):
+    #despesas = Despesa.objects.all()
+        
+    home = dict()
+    home['data'] = data
+        
+    #----- GERAR GRAFICO BARRA ----------    
+    pagtomes = Despesa.objects.filter(usuario=request.user,pago=True).values('dt_vencimento','valor').order_by('dt_vencimento')
+    pagtomesgrp = itertools.groupby(pagtomes, lambda d: d.get('dt_vencimento').strftime('%Y-%m'))    
+    pagtomesresult = [{'mes': month, 'valor': sum([x['valor'] for x in this_day])} 
+        for month, this_day in pagtomesgrp]
+
+    teste = funcao_data(11)
+    newdict = dict()
+    arraydict = []
+
+    for arraydata in teste:
+        mes = arraydata.strftime('%Y-%m')
+        valor = 0
+        for i in pagtomesresult:        
+            if mes == i['mes']:
+                valor = i['valor']        
+        newdict = {'mes': mes , 'valor': valor}
+        arraydict.append(newdict)    
+
+    home['pagtomes'] = arraydict
+    #------------------------------------
+
+    #----- GERAR GRAFICO PIZZA ----------
+    despesas_pie = Despesa.objects.filter(usuario=request.user,
+                                      pago=True,
+                                      dt_vencimento__month=data.month,
+                                      dt_vencimento__year=data.year).values('categoria__descricao','valor').order_by('categoria')
+
+    despesasgrp = itertools.groupby(despesas_pie, lambda d: d.get('categoria__descricao'))
+
+    despesasresult = [{'categoria': categoria, 'valor': sum([x['valor'] for x in this_day])} 
+        for categoria, this_day in despesasgrp]       
+    
+    for i in despesasresult:
+        categ = Categoria.objects.get(descricao=i.get('categoria'))        
+        i['cor'] = categ.cor
+
+    home['despesas'] = despesasresult
+    #------------------------------------     
+    
+    despesas = Despesa.objects.filter(usuario=request.user,
+                                      dt_vencimento__month=data.month,
+                                      dt_vencimento__year=data.year)
+    
+    for despesa in despesas:        
+        if despesa.pago == True:
+            home['pagto'] = home.get('pagto', 0) + despesa.valor                
+        home['total'] = home.get('total', 0) + despesa.valor                
+    if home.get('total', 0) != 0:
+        home['percent'] =  round((home.get('pagto', 0) * 100) / home.get('total', 0), 0)
+    else:
+        home['percent'] =  0
+
+    home['desp_pend'] = despesas.filter(pago=False)
+    home['desp_paga'] = despesas.filter(pago=True)
+    
+    args = {'home': home} 
+    return args
 
 def AlteraDespesasPend(despesa):		
 

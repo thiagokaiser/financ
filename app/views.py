@@ -25,11 +25,13 @@ from .forms import (
     )
 from .models import Profile, Mensagem
 from .funcoes import *
+from financ.despesa import HomeDespesa
+import datetime
 
 # Create your views here.
-def Home(request):    
-    args = {}
-    return render(request, 'app/base.html', args)
+def Home(request):        
+    args = HomeDespesa(request,datetime.datetime.today())
+    return render(request, 'app/home.html', args)
 
 def Profile(request):    
     args = {'user': request.user,

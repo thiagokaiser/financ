@@ -1,0 +1,305 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Home
+        <small>Despesas</small>
+    </h1>                    
+</section>
+
+<!-- Main content -->
+<section class="content">      
+
+    <!-- Your Page Content Here -->                
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Informações Gerais</h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-aqua">
+                        <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">despesas mes</span>
+                            <span class="info-box-number">R$ {{ home.pagto }}</span>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ home.percent }}%"></div>
+                            </div>
+                            <span class="progress-description">
+                                Total: {{ home.total }}
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Hoje</span>
+                            <span class="info-box-number">{{ home.data }}</span>
+                            
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">        
+        <div class="col-md-8">            
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- TABLE: LATEST ORDERS -->
+                    <!-- BAR CHART -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Pagamentos últimos 12 meses</h3>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="chart">
+                                <canvas id="barChart" style="height:230px"></canvas>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- DONUT CHART -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Despesas por Categoria</h3>
+                            <div class="box-tools pull-right">
+                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <canvas id="pieChart" style="height:250px"></canvas>
+                        </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Despesas Pendentes</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Despesa</th>
+                                            <th>Valor</th>
+                                            <th></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for desp in home.desp_pend %}
+                                        <tr>
+                                            <td>{{desp.descricao}}</td>
+                                            <td>{{desp.valor}}</td>                                    
+                                            <td><a class="btn btn-default btn-sm" href=""><span class="glyphicon glyphicon-list-alt"></span></a> </td>
+                                        </tr>                    
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer clearfix">            
+                            <a href="" class="btn btn-sm btn-default btn-flat pull-right">Ver Todas</a>
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Despesas Pagas</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Despesa</th>
+                                            <th>Valor</th>
+                                            <th></th>                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for desp in home.desp_paga %}
+                                        <tr>
+                                            <td>{{desp.descricao}}</td>
+                                            <td>{{desp.valor}}</td>                                    
+                                            <td><a class="btn btn-default btn-sm" href=""><span class="glyphicon glyphicon-list-alt"></span></a> </td>
+                                        </tr>                    
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer clearfix">            
+                            <a href="" class="btn btn-sm btn-default btn-flat pull-right">Ver Todas</a>
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>               
+</section><!-- /.content -->
+
+{% endblock %}
+
+{% block javascript %}
+
+{% load static %}
+<!-- ChartJS 1.0.1 -->
+<script type="text/javascript" src="{% static 'app/plugins/chartjs/Chart.min.js' %}" ></script>
+
+<script type="text/javascript">
+$(function () {
+/* ChartJS
+ * -------
+ * Here we will create a few charts using ChartJS
+ */
+
+var areaChartData = {
+  labels: [{% for i in home.pagtomes %}'{{ i.mes }}',{% endfor %}],
+  datasets: [{data: [{% for i in home.pagtomes %}{{ i.valor|stringformat:"f" }},{% endfor %}]}]
+};
+
+//-------------
+//- BAR CHART -
+//-------------
+var barChartCanvas = $("#barChart").get(0).getContext("2d");
+var barChart = new Chart(barChartCanvas);
+var barChartData = areaChartData;
+barChartData.datasets[0].fillColor = "#3c8dbc";
+barChartData.datasets[0].strokeColor = "#3c8dbc";
+barChartData.datasets[0].pointColor = "#3c8dbc";
+var barChartOptions = {
+  //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+  scaleBeginAtZero: true,
+  //Boolean - Whether grid lines are shown across the chart
+  scaleShowGridLines: true,
+  //String - Colour of the grid lines
+  scaleGridLineColor: "rgba(0,0,0,.05)",
+  //Number - Width of the grid lines
+  scaleGridLineWidth: 1,
+  //Boolean - Whether to show horizontal lines (except X axis)
+  scaleShowHorizontalLines: true,
+  //Boolean - Whether to show vertical lines (except Y axis)
+  scaleShowVerticalLines: true,
+  //Boolean - If there is a stroke on each bar
+  barShowStroke: true,
+  //Number - Pixel width of the bar stroke
+  barStrokeWidth: 2,
+  //Number - Spacing between each of the X value sets
+  barValueSpacing: 5,
+  //Number - Spacing between data sets within X values
+  barDatasetSpacing: 1,
+  //String - A legend template
+  legendTemplate: "",
+  //Boolean - whether to make the chart responsive
+  responsive: true,
+  maintainAspectRatio: true
+};
+
+barChartOptions.datasetFill = false;
+barChart.Bar(barChartData, barChartOptions);
+
+//-------------
+//- PIE CHART -
+//-------------
+// Get context with jQuery - using jQuery's .get() method.
+var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+var pieChart = new Chart(pieChartCanvas);
+var PieData = [
+  {% for despesa in home.despesas %}
+  {
+    value: {{ despesa.valor|stringformat:"f" }},
+    color: '{{ despesa.cor }}',
+    highlight: '{{ despesa.cor }}',
+    label: '{{ despesa.categoria }}'
+  },
+  {% endfor %}
+];
+
+var pieOptions = {
+  //Boolean - Whether we should show a stroke on each segment
+  segmentShowStroke: true,
+  //String - The colour of each segment stroke
+  segmentStrokeColor: "#fff",
+  //Number - The width of each segment stroke
+  segmentStrokeWidth: 2,
+  //Number - The percentage of the chart that we cut out of the middle
+  percentageInnerCutout: 50, // This is 0 for Pie charts
+  //Number - Amount of animation steps
+  animationSteps: 100,
+  //String - Animation easing effect
+  animationEasing: "easeOutBounce",
+  //Boolean - Whether we animate the rotation of the Doughnut
+  animateRotate: true,
+  //Boolean - Whether we animate scaling the Doughnut from the centre
+  animateScale: false,
+  //Boolean - whether to make the chart responsive to window resizing
+  responsive: true,
+  // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+  maintainAspectRatio: true,
+  //String - A legend template
+  legendTemplate: ""
+};
+//Create pie or douhnut chart
+// You can switch between pie and douhnut using the method below.
+pieChart.Doughnut(PieData, pieOptions);
+
+});
+
+
+</script>
+{% endblock javascript %}
