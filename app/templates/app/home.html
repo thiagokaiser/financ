@@ -37,7 +37,7 @@
                                 <div class="progress-bar" style="width: {{ home.percent }}%"></div>
                             </div>
                             <span class="progress-description">
-                                Total: {{ home.total }}
+                                Total: {{ home.total|floatformat:2 }}
                             </span>
                         </div>
                         <!-- /.info-box-content -->

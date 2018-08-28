@@ -74,6 +74,7 @@ def HomeDespesa(request,data):
         home['total'] = home.get('total', 0) + despesa.valor                
 
     home['pagto'] = home.get('pagto', 0)
+    home['total'] = home.get('total', 0)
     if home.get('total', 0) != 0:
         home['percent'] =  round((home.get('pagto', 0) * 100) / home.get('total', 0), 0)
     else:
