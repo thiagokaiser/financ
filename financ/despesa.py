@@ -49,9 +49,8 @@ def HomeDespesa(request,data):
 
     #----- GERAR GRAFICO PIZZA ----------
     despesas_pie = Despesa.objects.filter(usuario=request.user,
-                                      pago=True,
-                                      dt_vencimento__month=data.month,
-                                      dt_vencimento__year=data.year).values('categoria__descricao','valor').order_by('categoria')
+                                          dt_vencimento__month=data.month,
+                                          dt_vencimento__year=data.year).values('categoria__descricao','valor').order_by('categoria')
 
     despesasgrp = itertools.groupby(despesas_pie, lambda d: d.get('categoria__descricao'))
 
@@ -73,6 +72,8 @@ def HomeDespesa(request,data):
         if despesa.pago == True:
             home['pagto'] = home.get('pagto', 0) + despesa.valor                
         home['total'] = home.get('total', 0) + despesa.valor                
+
+    home['pagto'] = home.get('pagto', 0)
     if home.get('total', 0) != 0:
         home['percent'] =  round((home.get('pagto', 0) * 100) / home.get('total', 0), 0)
     else:

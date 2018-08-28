@@ -32,7 +32,7 @@
                         <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">despesas mes</span>
-                            <span class="info-box-number">R$ {{ home.pagto }}</span>
+                            <span class="info-box-number">R$ {{ home.pagto|floatformat:2 }}</span>
                             <div class="progress">
                                 <div class="progress-bar" style="width: {{ home.percent }}%"></div>
                             </div>
@@ -129,7 +129,7 @@
                                         <tr>
                                             <td>{{desp.descricao}}</td>
                                             <td>{{desp.valor}}</td>                                    
-                                            <td><a class="btn btn-default btn-sm" href=""><span class="glyphicon glyphicon-list-alt"></span></a> </td>
+                                            <td><a class="btn btn-default btn-sm" href="{% url 'financ:despesa_view' pk=desp.pk %}"><span class="glyphicon glyphicon-list-alt"></span></a> </td>
                                         </tr>                    
                                         {% endfor %}
                                     </tbody>
@@ -139,7 +139,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer clearfix">            
-                            <a href="" class="btn btn-sm btn-default btn-flat pull-right">Ver Todas</a>
+                            <a href="{% url 'financ:despesas' %}" class="btn btn-sm btn-default btn-flat pull-right">Ver Todas</a>
                         </div>
                         <!-- /.box-footer -->
                     </div>
@@ -173,7 +173,7 @@
                                         <tr>
                                             <td>{{desp.descricao}}</td>
                                             <td>{{desp.valor}}</td>                                    
-                                            <td><a class="btn btn-default btn-sm" href=""><span class="glyphicon glyphicon-list-alt"></span></a> </td>
+                                            <td><a class="btn btn-default btn-sm" href="{% url 'financ:despesa_view' pk=desp.pk %}"><span class="glyphicon glyphicon-list-alt"></span></a> </td>
                                         </tr>                    
                                         {% endfor %}
                                     </tbody>
@@ -183,7 +183,7 @@
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer clearfix">            
-                            <a href="" class="btn btn-sm btn-default btn-flat pull-right">Ver Todas</a>
+                            <a href="{% url 'financ:despesas' %}" class="btn btn-sm btn-default btn-flat pull-right">Ver Todas</a>
                         </div>
                         <!-- /.box-footer -->
                     </div>
