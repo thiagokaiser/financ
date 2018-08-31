@@ -151,7 +151,7 @@ LOGIN_EXEMPT_URLS = (
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_HOST_USER = 'kaisersystem@outlook.com'
-EMAIL_PORT = 587
+EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = 'kaisersystem@outlook.com'
 SERVER_EMAIL = 'kaisersystem@outlook.com'
 
