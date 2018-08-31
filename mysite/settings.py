@@ -148,10 +148,13 @@ LOGIN_EXEMPT_URLS = (
     r'^app/reset-password/complete/$',
     )
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'thiagokaisersystems@gmail.com'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_HOST_USER = 'kaisersystem@outlook.com'
 EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'kaisersystem@outlook.com'
+SERVER_EMAIL = 'kaisersystem@outlook.com'
 
 try:
     from .settings_passwords import *
