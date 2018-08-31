@@ -30,7 +30,11 @@ import datetime
 
 # Create your views here.
 def Home(request):        
-    args = HomeDespesa(request,datetime.datetime.today())
+    p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
+    p_mes    = int(request.GET.get('month', datetime.datetime.today().month))   
+    current  = datetime.datetime(p_ano, p_mes, 1)
+
+    args = HomeDespesa(request,current)
     return render(request, 'app/home.html', args)
 
 def Profile(request):    

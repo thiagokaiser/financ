@@ -13,6 +13,53 @@
 <!-- Main content -->
 <section class="content">      
 
+    <div class="modal fade" tabindex="-1" role="dialog" id="div-btn-mes">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Selecione um periodo:</h4>
+                </div>
+                <div class="modal-body">
+                    <select class="mes selectpicker show-tick" data-size="8" data-width="fit">
+                        <option value="01">Janeiro</option>
+                        <option value="02">Fevereiro</option>
+                        <option value="03">Março</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Maio</option>
+                        <option value="06">Junho</option>
+                        <option value="07">Julho</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    
+                    <select class="ano selectpicker show-tick" data-size="8" data-width="fit">                                
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                    </select>    
+                    <!--
+                    <input type="text" list="cars" />
+                    <datalist id="cars">
+                      <option>Volvo</option>
+                      <option>Saab</option>
+                      <option>Mercedes</option>
+                      <option>Audi</option>
+                    </datalist>
+                    -->
+                    <a class="btn btn-default btn-mes-ok"><span class="fa fa-check"></span></a>                        
+                </div>                        
+            </div>
+        </div>
+    </div>                     
+
     <!-- Your Page Content Here -->                
     <div class="box box-info">
         <div class="box-header with-border">
@@ -45,12 +92,12 @@
                     <!-- /.info-box -->
                 </div>
                 <div class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box bg-yellow">
+                    <div class="info-box bg-yellow" data-toggle="modal" data-target="#div-btn-mes">
                         <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Hoje</span>
-                            <span class="info-box-number">{{ home.data }}</span>
+                            <span class="info-box-text">Clique para alterar</span>
+                            <span class="info-box-number">{{ home.data|date:"F, Y" }}</span>
                             
                         </div>
                         <!-- /.info-box-content -->
@@ -202,17 +249,25 @@
 <script type="text/javascript" src="{% static 'app/plugins/chartjs/Chart.min.js' %}" ></script>
 
 <script type="text/javascript">
+  
+  $(".btn-mes-ok").click(function(e) {                
+      v_ano = $('.ano').selectpicker('val');
+      v_mes = $('.mes').selectpicker('val');
+      window.location.href = "{% url 'app:home' %}?year=" + v_ano + "&month=" + v_mes;
+  });
+  $('.mes').val('{{ home.data|date:"m" }}'); 
+  $('.ano').val('{{ home.data|date:"Y" }}');      
+
 $(function () {
-/* ChartJS
- * -------
- * Here we will create a few charts using ChartJS
- */
+  /* ChartJS
+   * -------
+   * Here we will create a few charts using ChartJS
+   */
 
-var areaChartData = {
-  labels: [{% for i in home.pagtomes %}'{{ i.mes }}',{% endfor %}],
-  datasets: [{data: [{% for i in home.pagtomes %}{{ i.valor|stringformat:"f" }},{% endfor %}]}]
-};
-
+  var areaChartData = {
+    labels: [{% for i in home.pagtomes %}'{{ i.mes }}',{% endfor %}],
+    datasets: [{data: [{% for i in home.pagtomes %}{{ i.valor|stringformat:"f" }},{% endfor %}]}]
+  };
 //-------------
 //- BAR CHART -
 //-------------
