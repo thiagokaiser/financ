@@ -2,7 +2,7 @@ import csv
 from django.contrib.auth.models import User
 from financ.models import Despesa, Categoria, Importacao
 
-with open('financ./scripts./despesas-all.csv') as csvfile:
+with open('financ/scripts/despesas-all.csv') as csvfile:
 	reader = csv.DictReader(csvfile, delimiter=';')
 
 	for row in reader:
