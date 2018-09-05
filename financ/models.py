@@ -13,6 +13,7 @@ class Despesa(models.Model):
 	usuario         = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	eliminada       = models.BooleanField(default=False)
 	parcela         = models.CharField(max_length=10, blank=True)		
+	importacao      = models.ForeignKey('Importacao', on_delete=models.CASCADE, null=True)
 	def __str__(self):
 		return self.descricao
 
@@ -20,5 +21,12 @@ class Categoria(models.Model):
 	descricao		= models.CharField(max_length=40)
 	cor     		= models.CharField(max_length=40, blank=True)
 	usuario         = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	def __str__(self):
+		return self.descricao
+
+class Importacao(models.Model):
+	descricao = models.CharField(max_length=40)
+	dt_import = models.DateField()			
+	usuario   = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	def __str__(self):
 		return self.descricao
