@@ -1,4 +1,4 @@
-Data;descricao;Categoria;Valor
+﻿Data;descricao;Categoria;Valor
 12/03/2017;101 GOURMET;Pagamentos;R$ 9,00
 07/05/2017;341 BURGER;Pagamentos;R$ 12,00
 23/10/2016;341 BURGER;Pagamentos;R$ 16,00
@@ -35,7 +35,7 @@ Data;descricao;Categoria;Valor
 01/10/2015;canister ml (1/3);Pagamentos;R$ 38,75
 03/11/2015;canister ml (2/3);Pagamentos;R$ 38,75
 01/12/2015;canister ml (3/3);Pagamentos;R$ 38,75
-05/08/2015;Cart�o Cr�dito;Pagamentos;R$ 600,00
+05/08/2015;Cartão Crédito;Pagamentos;R$ 600,00
 11/01/2016;CASA DO PAO DE QUEIJ;Pagamentos;R$ 17,50
 17/08/2015;Cascudo chocolate;Pagamentos;R$ 35,00
 01/10/2015;CASSOL MAT CONSTRUCA;Pagamentos;R$ 122,30
@@ -43,7 +43,7 @@ Data;descricao;Categoria;Valor
 02/01/2017;CEA 247 JOI;Pagamentos;R$ 10,00
 20/02/2018;Celular;Pagamentos;R$ 50,00
 10/08/2015;Celular ;Pagamentos;R$ 25,00
-10/08/2015;Celular v�;Pagamentos;R$ 20,00
+10/08/2015;Celular vó;Pagamentos;R$ 20,00
 26/11/2016;CHICO DE MINAS;Pagamentos;R$ 27,77
 24/12/2016;CHINA IN BOX;Pagamentos;R$ 69,90
 27/11/2016;CHINA IN BOX;Pagamentos;R$ 43,95
@@ -113,7 +113,7 @@ Data;descricao;Categoria;Valor
 01/10/2015;DROGA RAIA 361;Pagamentos;R$ 68,93
 16/04/2016;DVA PNEUS;Pagamentos;R$ 60,00
 01/12/2015;ECOMMERCE*SONYPLA;Pagamentos;R$ 31,11
-05/08/2015;Edson;Educa��o;R$ 210,00
+05/08/2015;Edson;Educação;R$ 210,00
 19/03/2017;EXPRESSO DOCE;Pagamentos;R$ 73,40
 24/07/2016;FRESH BOWL COM ALIME;Pagamentos;R$ 13,00
 01/09/2015;gasolina makro;Pagamentos;R$ 85,79
@@ -155,19 +155,19 @@ Data;descricao;Categoria;Valor
 22/05/2016;GOKONI;Pagamentos;R$ 27,80
 28/02/2016;GOKONI;Pagamentos;R$ 49,70
 31/01/2016;GOKONI;Pagamentos;R$ 35,72
-08/09/2016;Guitarra - Edson;Educa��o;R$ 190,00
-08/08/2016;Guitarra - Edson;Educa��o;R$ 190,00
-08/07/2016;Guitarra - Edson;Educa��o;R$ 210,00
-08/06/2016;Guitarra - Edson;Educa��o;R$ 190,00
-05/05/2016;Guitarra - Edson;Educa��o;R$ 190,00
-05/04/2016;Guitarra - Edson;Educa��o;R$ 190,00
-05/03/2016;Guitarra - Edson;Educa��o;R$ 180,00
-05/02/2016;Guitarra - Edson;Educa��o;R$ 180,00
-05/01/2016;Guitarra - Edson;Educa��o;R$ 180,00
-05/12/2015;Guitarra - Edson;Educa��o;R$ 230,00
-05/11/2015;Guitarra - Edson;Educa��o;R$ 206,00
-05/10/2015;Guitarra - Edson;Educa��o;R$ 180,00
-05/09/2015;Guitarra - Edson;Educa��o;R$ 180,00
+08/09/2016;Guitarra - Edson;Educação;R$ 190,00
+08/08/2016;Guitarra - Edson;Educação;R$ 190,00
+08/07/2016;Guitarra - Edson;Educação;R$ 210,00
+08/06/2016;Guitarra - Edson;Educação;R$ 190,00
+05/05/2016;Guitarra - Edson;Educação;R$ 190,00
+05/04/2016;Guitarra - Edson;Educação;R$ 190,00
+05/03/2016;Guitarra - Edson;Educação;R$ 180,00
+05/02/2016;Guitarra - Edson;Educação;R$ 180,00
+05/01/2016;Guitarra - Edson;Educação;R$ 180,00
+05/12/2015;Guitarra - Edson;Educação;R$ 230,00
+05/11/2015;Guitarra - Edson;Educação;R$ 206,00
+05/10/2015;Guitarra - Edson;Educação;R$ 180,00
+05/09/2015;Guitarra - Edson;Educação;R$ 180,00
 20/10/2015;HABIBS;Pagamentos;R$ 17,40
 30/09/2015;HABIBS;Pagamentos;R$ 14,50
 09/04/2017;HABIBS JOINVILLE;Pagamentos;R$ 14,85
@@ -516,23 +516,23 @@ Data;descricao;Categoria;Valor
 28/12/2015;PETLANDIA;Pagamentos;R$ 19,30
 07/12/2015;PETLANDIA;Pagamentos;R$ 7,50
 20/09/2015;PETLANDIA;Pagamentos;R$ 7,50
-05/08/2018;P�s;Educa��o;R$ 358,29
-05/07/2018;P�s;Educa��o;R$ 358,31
-01/06/2018;P�s;Educa��o;R$ 358,31
-02/05/2018;P�s;Educa��o;R$ 358,31
-05/04/2018;P�s;Educa��o;R$ 358,31
-05/03/2018;P�s;Educa��o;R$ 358,31
-05/02/2018;P�s;Educa��o;R$ 358,31
-05/01/2018;P�s;Educa��o;R$ 358,31
-05/12/2017;P�s;Educa��o;R$ 358,31
-05/11/2017;P�s;Educa��o;R$ 358,31
-05/10/2017;P�s;Educa��o;R$ 358,31
-05/09/2017;P�s;Educa��o;R$ 358,31
-08/08/2017;P�s;Educa��o;R$ 358,31
-05/07/2017;P�s;Educa��o;R$ 358,31
-05/06/2017;P�s;Educa��o;R$ 358,31
-20/05/2017;P�s;Educa��o;R$ 358,31
-10/04/2017;P�s;Educa��o;R$ 358,31
+05/08/2018;Pós;Educação;R$ 358,29
+05/07/2018;Pós;Educação;R$ 358,31
+01/06/2018;Pós;Educação;R$ 358,31
+02/05/2018;Pós;Educação;R$ 358,31
+05/04/2018;Pós;Educação;R$ 358,31
+05/03/2018;Pós;Educação;R$ 358,31
+05/02/2018;Pós;Educação;R$ 358,31
+05/01/2018;Pós;Educação;R$ 358,31
+05/12/2017;Pós;Educação;R$ 358,31
+05/11/2017;Pós;Educação;R$ 358,31
+05/10/2017;Pós;Educação;R$ 358,31
+05/09/2017;Pós;Educação;R$ 358,31
+08/08/2017;Pós;Educação;R$ 358,31
+05/07/2017;Pós;Educação;R$ 358,31
+05/06/2017;Pós;Educação;R$ 358,31
+20/05/2017;Pós;Educação;R$ 358,31
+10/04/2017;Pós;Educação;R$ 358,31
 16/03/2017;POSTO AMERICA;Pagamentos;R$ 5,99
 26/12/2016;POSTO DAMIANI D2;Pagamentos;R$ 50,00
 30/09/2016;POSTO DELTA;Pagamentos;R$ 105,15
@@ -566,7 +566,7 @@ Data;descricao;Categoria;Valor
 01/09/2015;Roupa - Rener (1/2);Pagamentos;R$ 204,00
 01/10/2015;Roupa - Rener (2/2);Pagamentos;R$ 204,00
 19/09/2015;Sem parar;Pagamentos;R$ 90,00
-05/02/2017;Senac - Pos;Educa��o;R$ 369,39
+05/02/2017;Senac - Pos;Educação;R$ 369,39
 03/11/2015;SUBWAY;Pagamentos;R$ 19,75
 01/12/2015;SYLVIO DA SILVA;Pagamentos;R$ 48,80
 31/10/2015;TEMPERO DA FAZENDA;Pagamentos;R$ 44,74
