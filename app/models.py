@@ -11,6 +11,7 @@ class Profile(models.Model):
     estado 			= models.CharField(max_length=2, blank=True)
     dt_nascimento 	= models.DateField(null=True, blank=True)
     foto_perfil     = models.FileField(upload_to='perfil/', blank=True, null=True)
+    layoutskin      = models.ForeignKey('LayoutSkin', on_delete=models.CASCADE, default=1)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -59,3 +60,10 @@ class Mensagem(models.Model):
 
     def __str__(self):
         return self.assunto
+
+
+class LayoutSkin(models.Model):
+    descricao       = models.TextField(max_length=40, blank=True)
+    nome_css        = models.TextField(max_length=40, blank=True)
+    def __str__(self):
+        return self.descricao

@@ -18,7 +18,7 @@
         <!-- CSS TEMPLATE -->
         <link rel="stylesheet" type="text/css" href="{% static 'app/style.css' %}" />
         <!-- CSS Tema azul -->
-        <link rel="stylesheet" type="text/css" href="{% static 'app/dist/css/skins/skin-black-light.css' %}" />        
+        <link rel="stylesheet" type="text/css" href="{% static 'app/dist/css/skins/' %}{{ user.profile.layoutskin.nome_css }}.css "/>        
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" type="text/css" href="{% static 'app/font-awesome/css/font-awesome.min.css' %}" />     
         <!-- Multiselect personalizado -->
@@ -29,7 +29,7 @@
     </head>
 
 
-    <body class="skin-black-light sidebar-mini {% if request.session.menu_aberto %} sidebar-collapse {% endif %}">
+    <body class="{{ user.profile.layoutskin.nome_css }} sidebar-mini {% if request.session.menu_aberto %} sidebar-collapse {% endif %}">
 
         <div class="wrapper">
             <!-- Main Header -->

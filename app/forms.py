@@ -74,7 +74,7 @@ class ProfileForm(forms.ModelForm):
 									  help_text='Arquivos válidos: jpg, png, pdf. Tamanho máximo: 1.5mb')
 	class Meta:
 		model = Profile
-		fields = ('descricao', 'cidade', 'estado','foto_perfil')
+		fields = ('descricao', 'cidade', 'estado','foto_perfil', 'layoutskin')
 
 class MensagemFormView(forms.ModelForm):
     class Meta:
