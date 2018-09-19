@@ -1,0 +1,1 @@
+exec(open('financ/scripts/importa_skins.py').read())

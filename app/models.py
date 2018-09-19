@@ -11,7 +11,7 @@ class Profile(models.Model):
     estado 			= models.CharField(max_length=2, blank=True)
     dt_nascimento 	= models.DateField(null=True, blank=True)
     foto_perfil     = models.FileField(upload_to='perfil/', blank=True, null=True)
-    layoutskin      = models.ForeignKey('LayoutSkin', on_delete=models.CASCADE, default=1)
+    layoutskin      = models.ForeignKey('LayoutSkin', on_delete=models.SET_DEFAULT, default=1)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
