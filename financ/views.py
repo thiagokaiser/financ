@@ -29,7 +29,7 @@ import json
 def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	
+
 	try:
 		current = datetime.datetime(p_ano, p_mes, 1)
 	except:
@@ -316,7 +316,6 @@ def Gera_XLS_Mes(request):
 	response = HttpResponse(content_type='application/vnd.ms-excel')
 	#response['Set-Cookie'] = "fileDownload=true; path=/"
 	response['Content-Disposition'] = 'attachment; filename=despesas' + str(data_ini.date()) + "to" + str(data_fim.date()) + '.xlsx'
-
 
 	xlsx_data = GeraExcel(despesas)
 	response.write(xlsx_data)
