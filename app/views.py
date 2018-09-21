@@ -32,7 +32,12 @@ import datetime
 def Home(request):        
     p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
     p_mes    = int(request.GET.get('month', datetime.datetime.today().month))   
-    current  = datetime.datetime(p_ano, p_mes, 1)
+    try:
+        current  = datetime.datetime(p_ano, p_mes, 1)
+    except:
+        messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+        return redirect('app:home')
+
 
     args = HomeDespesa(request,current)
     return render(request, 'app/home.html', args)

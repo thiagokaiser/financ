@@ -29,7 +29,13 @@ import json
 def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	current = datetime.datetime(p_ano, p_mes, 1)
+	
+	try:
+		current = datetime.datetime(p_ano, p_mes, 1)
+	except:
+		messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+		return redirect('financ:despesas')
+
 	if (current.month - 1) == 0:
 		current = datetime.datetime(p_ano , p_mes, 1)
 		next_month = datetime.datetime(p_ano, 2, 1)

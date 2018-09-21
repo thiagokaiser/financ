@@ -26,8 +26,12 @@ def Ponto_List(request):
 
 	#import pdb; pdb.set_trace()
 
-	ponto = Ponto.objects.filter(usuario=request.user,
-								 dia__range=(p_dt_ini, p_dt_fim))	
+	try:
+		ponto = Ponto.objects.filter(usuario=request.user,
+									 dia__range=(p_dt_ini, p_dt_fim))	
+	except:
+		messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+		return redirect('ponto:ponto_list')
 	ponto = ponto.order_by('dia','hora')
 	
 	try:
