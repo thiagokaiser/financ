@@ -6,7 +6,12 @@
 <section class="content-header">
     <h1>
         Despesa
-        <small>Edita</small>
+        {% if param == 'all' %}
+            <small>Editando todas não pagas</small>
+        {% else %}
+            <small>Editando somente esta</small>
+        {% endif %}
+
     </h1>                    
 </section>
 
