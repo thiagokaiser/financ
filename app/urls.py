@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^logout/$', logout, {'template_name': 'accounts/logout.html'}, name='logout'), 
     url(r'^profile/$', views.Profile , name='profile'),
     url(r'^profile/edit/$', views.Edit_profile , name='edit_profile'),
+    url(r'^profile/editpic/$', views.Edit_profilepic , name='edit_profilepic'),
     url(r'^register/$', views.Register , name='register'),
     url(r'^change-password/$', views.Change_Password , name='change_password'),    
     url(r'^reset-password/$', password_reset, {'template_name': 'accounts/reset_password.html',

@@ -26,7 +26,10 @@ from .forms import (
 from .models import Profile, Mensagem
 from .funcoes import *
 from financ.despesa import HomeDespesa
+from django.core.files.base import ContentFile
 import datetime
+import base64
+#import time
 
 # Create your views here.
 def Home(request):        
@@ -68,6 +71,26 @@ def Edit_profile(request):
     
 
     return render(request, 'accounts/edit_profile.html', args)
+
+def Edit_profilepic(request):   
+    if request.method == 'POST':     
+        imagem = request.POST.get('image')             
+        if imagem != '':            
+            image_data = imagem
+            format, imgstr = image_data.split(';base64,')
+            #print("format", format)
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr))  
+            file_name = "'" + request.user.username + "." + ext        
+            request.user.profile.foto_perfil.save(file_name, data, save=True) # image is User's model field
+        else:
+            request.user.profile.ApagaFoto()
+            
+        return HttpResponse('')        
+        
+    args = {'profile': request.user.profile}                
+
+    return render(request, 'accounts/edit_profilepic.html', args)
 
 def Register(request):
     if request.method == 'POST':

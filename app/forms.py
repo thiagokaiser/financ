@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 from .fields import RestrictedFileField
+from django.forms.widgets import TextInput
 
 class EditProfileForm(UserChangeForm):
 	password = ReadOnlyPasswordHashField()	
@@ -12,7 +13,7 @@ class EditProfileForm(UserChangeForm):
 		fields = (
 		'first_name',
 		'last_name',
-		'email',
+		'email',		
 		'password'		
 		)	
 
@@ -68,13 +69,21 @@ class RegisterProfileForm(UserCreationForm):
 		return email
 
 class ProfileForm(forms.ModelForm):
-	foto_perfil = RestrictedFileField(content_types=['image/jpeg','image/png', 'application/pdf'],
+	"""foto_perfil = RestrictedFileField(content_types=['image/jpeg','image/png', 'application/pdf'],
 									  max_upload_size=1600000, 
 									  required=False,									  
-									  help_text='Arquivos válidos: jpg, png, pdf. Tamanho máximo: 1.5mb')
+									  help_text='Arquivos válidos: jpg, png, pdf. Tamanho máximo: 1.5mb')"""
 	class Meta:
 		model = Profile
-		fields = ('descricao', 'cidade', 'estado','foto_perfil', 'layoutskin')
+		fields = (			
+			'dt_nascimento',
+			'cidade',
+			'estado',			
+			'layoutskin',
+			'descricao')
+		widgets = {
+            'dt_nascimento': TextInput(attrs={'type': 'date'}),
+        }
 
 class MensagemFormView(forms.ModelForm):
     class Meta:

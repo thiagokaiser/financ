@@ -26,7 +26,7 @@ SECRET_KEY = '88&1q#vge^5k6d$_0@o79)5dyee(1k8)mbj6%29nb5=v*yao-4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-if socket.gethostname() == 'JVE-220':
+if socket.gethostname() == 'JVE003':
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False

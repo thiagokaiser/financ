@@ -13,6 +13,10 @@ class Profile(models.Model):
     foto_perfil     = models.FileField(upload_to='perfil/', blank=True, null=True)
     layoutskin      = models.ForeignKey('LayoutSkin', on_delete=models.SET_DEFAULT, default=1)
 
+    def ApagaFoto(self):        
+        self.foto_perfil = None
+        self.save()
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
