@@ -162,12 +162,12 @@ LOGIN_EXEMPT_URLS = (
     r'^app/reset-password/complete/$',
     )
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'kaiserzsystem@gmail.com'
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp.hostinger.com.br'
+EMAIL_HOST_USER = 'contato@thiagokaiser.com.br'
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'kaiserzsystem@gmail.com'
-SERVER_EMAIL = 'kaiserzsystem@gmail.com'
+DEFAULT_FROM_EMAIL = 'contato@thiagokaiser.com.br'
+SERVER_EMAIL = 'contato@thiagokaiser.com.br'
 
 try:
     from .settings_passwords import *
