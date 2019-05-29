@@ -16,6 +16,8 @@ class Despesa(models.Model):
 	importacao      = models.ForeignKey('Importacao', on_delete=models.CASCADE, null=True)
 	def __str__(self):
 		return self.descricao
+	class Meta:
+		permissions = (('acesso_app_financ', 'Pode acessar Financeiro'),)
 
 class Categoria(models.Model):
 	descricao		= models.CharField(max_length=40)

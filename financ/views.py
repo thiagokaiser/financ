@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.decorators import permission_required
 from .models import (
 	Despesa,
 	Categoria,
@@ -26,6 +27,7 @@ import json
 #import pdb; pdb.set_trace()
 
 # Create your views here.
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -60,6 +62,7 @@ def Despesas(request):
 
 	return render(request, 'financ/despesas.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Add(request):	
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -105,6 +108,7 @@ def Despesa_Add(request):
 
 	return render(request, 'financ/despesa_add.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_View(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -123,6 +127,7 @@ def Despesa_View(request,pk):
 
 	return render(request, 'financ/despesa_view.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Edit(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -157,6 +162,7 @@ def Despesa_Edit(request,pk):
 	args = {'form': form, 'despesa': despesa, 'param': ''}    
 	return render(request, 'financ/despesa_edit.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Edit_All(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -193,6 +199,7 @@ def Despesa_Edit_All(request,pk):
 	args = {'form': form, 'despesa': despesa, 'param': 'all'}    
 	return render(request, 'financ/despesa_edit.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Del(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -204,6 +211,7 @@ def Despesa_Del(request):
 
 	return HttpResponse('')	
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Del_All(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
 	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
@@ -215,6 +223,7 @@ def Despesa_Del_All(request):
 	
 	return HttpResponse('')	
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Categoria_Add(request):
 	if request.is_ajax():
 		if request.method == 'POST':
@@ -245,11 +254,13 @@ def Categoria_Add(request):
 
 		return render(request, 'financ/categoria_add.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Categoria_List(request):	
 	categorias = Categoria.objects.filter(usuario=request.user)	
 	args = {'categorias': categorias}
 	return render(request, 'financ/categoria_list.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Categoria_View(request, pk):
 	categoria = get_object_or_404(Categoria, pk=pk)
 	if categoria.usuario != request.user:
@@ -259,6 +270,7 @@ def Categoria_View(request, pk):
 	args = {'categoria': categoria}
 	return render(request, 'financ/categoria_view.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Categoria_Edit(request, pk):
 	categoria = get_object_or_404(Categoria, pk=pk)
 	if categoria.usuario != request.user:
@@ -280,6 +292,7 @@ def Categoria_Edit(request, pk):
 
 	return render(request, 'financ/categoria_edit.html', args)
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Categoria_Del(request):
     if request.POST and request.is_ajax():        
         if request.POST.getlist('categoria_lista[]'):
@@ -296,6 +309,7 @@ def Categoria_Del(request):
 
     return HttpResponse('')
 
+@permission_required('financ.acesso_app_financ', raise_exception=True)
 def Gera_XLS_Mes(request):
 	p_data_ini    = request.GET.get('data_ini')
 	p_data_fim    = request.GET.get('data_fim')

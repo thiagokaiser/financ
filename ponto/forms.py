@@ -14,7 +14,7 @@ class PontoForm(forms.ModelForm):
         widgets = {
             'dia': TextInput(attrs={'type': 'date'}),
             'hora': TextInput(attrs={'type': 'time'}),
-        }
+        }        
 
 class PontoFormView(forms.ModelForm):        
     class Meta:

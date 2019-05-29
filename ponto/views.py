@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.decorators import permission_required
 from .forms import(
 	PontoForm,
 	PontoFormView,
@@ -14,7 +15,8 @@ from django.core import serializers
 from datetime import datetime, timedelta, date
 import calendar
 #import pdb; pdb.set_trace()
-# Create your views here.
+
+@permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_List(request):
 	dia = datetime.today() - timedelta(days=10)
 	p_dt_ini    = request.GET.get('dt_ini', dia.strftime('%Y-%m-%d'))
@@ -81,6 +83,7 @@ def Ponto_List(request):
 
 	return render(request, 'ponto/ponto.html', args)
 
+@permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_Add(request):
 	if request.method == 'POST':
 		form = PontoForm(request.POST, request.FILES)
@@ -101,6 +104,7 @@ def Ponto_Add(request):
 
 	return render(request, 'ponto/ponto_add.html', args)
 
+@permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_View(request,pk):	
 	ponto = get_object_or_404(Ponto, pk=pk)  	
 	if ponto.usuario != request.user:
@@ -113,6 +117,7 @@ def Ponto_View(request,pk):
 
 	return render(request, 'ponto/ponto_view.html', args)
 
+@permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_Edit(request,pk):
 	ponto = get_object_or_404(Ponto, pk=pk)
 	if ponto.usuario != request.user:
@@ -132,6 +137,7 @@ def Ponto_Edit(request,pk):
 
 	return render(request, 'ponto/ponto_edit.html', args)
 
+@permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_Del(request):
     if request.POST and request.is_ajax():        
         if request.POST.getlist('ponto_lista[]'):
@@ -148,6 +154,7 @@ def Ponto_Del(request):
 
     return HttpResponse('')
 
+@permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def ParamPonto_Edit(request):
 	if request.is_ajax():
 		if request.method == 'POST':
