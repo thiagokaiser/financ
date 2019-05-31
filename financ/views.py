@@ -19,6 +19,7 @@ from .despesa import (
 	AdicionaDespesa,
 	GeraExcel
 	)
+from mysite.decorators import user_financ
 import datetime
 import calendar
 import json
@@ -108,6 +109,7 @@ def Despesa_Add(request):
 
 	return render(request, 'financ/despesa_add.html', args)
 
+@user_financ
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_View(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
@@ -116,10 +118,7 @@ def Despesa_View(request,pk):
 	mes = dict()
 	mes['atual'] = current
 
-	despesa = get_object_or_404(Despesa, pk=pk)
-	if despesa.usuario != request.user:
-		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-		return redirect('financ:despesas')    
+	despesa = get_object_or_404(Despesa, pk=pk)	
 	despesa.dt_vencimento = datetime.date(p_ano,p_mes,despesa.dt_vencimento.day)
 
 	args = {'despesa': despesa,
@@ -127,6 +126,7 @@ def Despesa_View(request,pk):
 
 	return render(request, 'financ/despesa_view.html', args)
 
+@user_financ
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Edit(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
@@ -135,9 +135,6 @@ def Despesa_Edit(request,pk):
 	url      = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
 	despesa = get_object_or_404(Despesa, pk=pk)
-	if despesa.usuario != request.user:
-		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-		return redirect('financ:despesas')
 
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
@@ -162,6 +159,7 @@ def Despesa_Edit(request,pk):
 	args = {'form': form, 'despesa': despesa, 'param': ''}    
 	return render(request, 'financ/despesa_edit.html', args)
 
+@user_financ
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Edit_All(request,pk):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
@@ -169,10 +167,7 @@ def Despesa_Edit_All(request,pk):
 	p_fixa   = int(request.GET.get('fixa', 0))	
 	url      = '?year=' + str(p_ano) + '&month=' + str(p_mes)
 
-	despesa = get_object_or_404(Despesa, pk=pk)
-	if despesa.usuario != request.user:
-		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-		return redirect('financ:despesas')
+	despesa = get_object_or_404(Despesa, pk=pk)	
 
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        

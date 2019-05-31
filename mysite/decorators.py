@@ -1,13 +1,13 @@
 from django.core.exceptions import PermissionDenied
-#from simple_decorators.apps.models import Entry
-"""
-def user_financ(function):
-    def wrap(request, *args, **kwargs):        
-        if request.user.has_perm('financ'):
-            return function(request, *args, **kwargs)
-        else:
-            raise PermissionDenied
-    wrap.__doc__ = function.__doc__
-    wrap.__name__ = function.__name__
-    return wrap
-"""
+from financ.models import Despesa
+from functools import wraps
+
+def user_financ(f):
+	@wraps(f)
+	def wrap(request, *args, **kwargs):        		
+		despesa = Despesa.objects.get(pk=kwargs['pk'])
+		if despesa.usuario == request.user:			
+			return f(request, *args, **kwargs)
+		else:
+			raise PermissionDenied			
+	return wrap
