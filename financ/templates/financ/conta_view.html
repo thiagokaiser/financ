@@ -5,7 +5,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Tag
+        Conta
         <small>View</small>
     </h1>                    
 </section>
@@ -16,25 +16,21 @@
     <div class="box box-default">            
         <div class="box-body">             
             
-            <a class="btn btn-default" href="{% url 'financ:categoria_list' %}">Voltar</a>
-            <a class="btn btn-default" href="{% url 'financ:categoria_edit' pk=categoria.pk %}">Editar</a>
+            <a class="btn btn-default" href="{% url 'financ:conta_list' %}">Voltar</a>
+            <a class="btn btn-default" href="{% url 'financ:conta_edit' pk=conta.pk %}">Editar</a>
             <a id="bt-del" class="btn btn-default" 
                data-toggle="confirmation" data-placement="bottom"
                data-btn-ok-label="Confirmar" data-btn-ok-icon="glyphicon glyphicon-share-alt"
                data-btn-ok-class="btn-success"
                data-btn-cancel-label="Cancelar" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
                data-btn-cancel-class="btn-danger"
-               data-title="Tem certeza?" data-content="A categoria será excluida permanentemente.">Deletar </a>
+               data-title="Tem certeza?" data-content="A conta será excluida permanentemente.">Deletar </a>
             <p></p>       
             <table class="table" style="max-width:300px;">  {% csrf_token %}
                 <tr>
                     <th>Descrição</th>
-                    <td>{{ categoria.descricao }}</td>
-                </tr>
-                <tr>
-                    <th>Cor</th>
-                    <td>{{ categoria.cor }}</td>
-                </tr>
+                    <td>{{ conta.descricao }}</td>
+                </tr>                
             </table>            
         </div>
     </div>
@@ -50,14 +46,14 @@
     $('#bt-del').confirmation({
         rootSelector: '[data-toggle=confirmation]',
         onConfirm: function () {
-            var categoria_list = [];        
-            categoria_list.push({{ categoria.pk }});
+            var conta_list = [];        
+            conta_list.push({{ conta.pk }});
             $.ajax({
-                url:"{% url 'financ:categoria_del' %}",
+                url:"{% url 'financ:conta_del' %}",
                 type: "POST",            
-                data: {categoria_lista: categoria_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                data: {conta_lista: conta_list, csrfmiddlewaretoken: '{{ csrf_token }}'},
                 success:function(response){
-                window.location.href= "{% url 'financ:categoria_list' %}"
+                window.location.href= "{% url 'financ:conta_list' %}"
                 },
                 complete:function(){},
                 error:function (xhr, textStatus, thrownError){}

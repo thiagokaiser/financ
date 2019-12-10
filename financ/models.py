@@ -14,6 +14,7 @@ class Despesa(models.Model):
 	eliminada       = models.BooleanField(default=False)
 	parcela         = models.CharField(max_length=10, blank=True)		
 	importacao      = models.ForeignKey('Importacao', on_delete=models.CASCADE, null=True)
+	conta           = models.ForeignKey('Conta', on_delete=models.CASCADE, blank=True, null=True)
 	def __str__(self):
 		return self.descricao
 	class Meta:
@@ -22,6 +23,12 @@ class Despesa(models.Model):
 class Categoria(models.Model):
 	descricao		= models.CharField(max_length=40)
 	cor     		= models.CharField(max_length=40, blank=True)
+	usuario         = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	def __str__(self):
+		return self.descricao
+
+class Conta(models.Model):
+	descricao		= models.CharField(max_length=40)	
 	usuario         = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	def __str__(self):
 		return self.descricao

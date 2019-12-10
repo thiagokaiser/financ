@@ -43,5 +43,16 @@
         $("#id_pago").closest("tr").hide()  
     {% endif %}
 
+    $('#id_categoria').selectpicker({          
+        size: 5,
+        width: 'fit',
+        //showTick: true,
+    });
+    $('#id_conta').selectpicker({          
+        size: 5,
+        width: 'fit',
+        //showTick: true,
+    });
+
 </script>
 {% endblock javascript %}

@@ -3,10 +3,12 @@ from django.contrib.auth.decorators import permission_required
 from .models import (
 	Despesa,
 	Categoria,
+	Conta,
 	)
 from .forms import (
 	DespesaFormView,
 	CategoriaFormView,
+	ContaFormView,
 	)
 from django.utils import timezone
 from django.contrib import messages
@@ -301,6 +303,77 @@ def Categoria_Del(request):
             messages.success(request, "Mensagens excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
         else:
             messages.error(request, "Nenhuma mensagem selecionada.", extra_tags='alert-error alert-dismissible')               
+
+    return HttpResponse('')
+
+@permission_required('financ.acesso_app_financ', raise_exception=True)
+def Conta_Add(request):	
+	if request.method == 'POST':
+		form = ContaFormView(request.POST)
+		if form.is_valid():
+			conta = form.save(commit=False)           	
+			conta.usuario = request.user
+			conta.save()
+			return redirect('financ:conta_list')
+	else:
+		form = ContaFormView()
+
+	args = {'form': form}
+
+	return render(request, 'financ/conta_add.html', args)
+
+@permission_required('financ.acesso_app_financ', raise_exception=True)
+def Conta_List(request):	
+	contas = Conta.objects.filter(usuario=request.user)	
+	args = {'contas': contas}
+	return render(request, 'financ/conta_list.html', args)
+
+@permission_required('financ.acesso_app_financ', raise_exception=True)
+def Conta_View(request, pk):
+	conta = get_object_or_404(Conta, pk=pk)
+	if conta.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:conta_list')
+
+	args = {'conta': conta}
+	return render(request, 'financ/conta_view.html', args)
+
+@permission_required('financ.acesso_app_financ', raise_exception=True)
+def Conta_Edit(request, pk):
+	conta = get_object_or_404(Conta, pk=pk)
+	if conta.usuario != request.user:
+		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+		return redirect('financ:conta_list')
+	if request.method == 'POST':
+		form = ContaFormView(request.POST, instance=conta)        
+		if form.is_valid():  			
+			form.save()            
+			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
+			
+			return redirect('financ:conta_list')
+		else:
+			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
+	else:
+		form = ContaFormView(instance=conta)        
+
+	args = {'form': form}    
+
+	return render(request, 'financ/conta_edit.html', args)
+
+@permission_required('financ.acesso_app_financ', raise_exception=True)
+def Conta_Del(request):
+    if request.POST and request.is_ajax():        
+        if request.POST.getlist('conta_lista[]'):
+            conta_list = request.POST.getlist('conta_lista[]')            
+            for i in conta_list:
+                conta = Conta.objects.get(pk=i)
+                if conta.usuario != request.user:
+                    messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
+                    return redirect('financ:conta_list')
+                conta.delete()            
+            messages.success(request, "Conta excluida com sucesso.", extra_tags='alert-success alert-dismissible')            
+        else:
+            messages.error(request, "Nenhuma conta selecionada.", extra_tags='alert-error alert-dismissible')               
 
     return HttpResponse('')
 

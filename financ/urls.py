@@ -16,4 +16,9 @@ urlpatterns = [
     url(r'^categoria_view/(?P<pk>\d+)/$', views.Categoria_View, name='categoria_view'),        
     url(r'^categoria_edit/(?P<pk>\d+)/$', views.Categoria_Edit, name='categoria_edit'),        
     url(r'^categoria_del/$', views.Categoria_Del, name='categoria_del'),
+    url(r'^conta_add/$', views.Conta_Add, name='conta_add'),        
+    url(r'^conta_list/$', views.Conta_List, name='conta_list'),        
+    url(r'^conta_view/(?P<pk>\d+)/$', views.Conta_View, name='conta_view'),        
+    url(r'^conta_edit/(?P<pk>\d+)/$', views.Conta_Edit, name='conta_edit'),        
+    url(r'^conta_del/$', views.Conta_Del, name='conta_del'),
 ]
