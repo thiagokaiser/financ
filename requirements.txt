@@ -1,0 +1,2 @@
+Django==1.11.11
+XlsxWriter==1.0.5

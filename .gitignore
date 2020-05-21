@@ -1,7 +1,8 @@
 *.pyc
 *~
 __pycache__
-myvenv
+venv
+.idea
 db.sqlite3
 .DS_Store
 mysite/settings_passwords.py
