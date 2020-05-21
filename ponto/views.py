@@ -9,11 +9,8 @@ from .models import(
 	Ponto,
 	ParamPonto,
 	)
-from django.utils import timezone
 from django.contrib import messages
-from django.core import serializers
-from datetime import datetime, timedelta, date
-import calendar
+from datetime import datetime, timedelta
 #import pdb; pdb.set_trace()
 
 @permission_required('ponto.acesso_app_ponto', raise_exception=True)
@@ -24,9 +21,7 @@ def Ponto_List(request):
 	p_rs_ponto  = request.GET.get('rs_ponto', 'all')
 
 	periodo = {'dt_ini': p_dt_ini,
-               'dt_fim': p_dt_fim}
-
-	#import pdb; pdb.set_trace()
+			   'dt_fim': p_dt_fim}
 
 	try:
 		ponto = Ponto.objects.filter(usuario=request.user,
@@ -37,9 +32,9 @@ def Ponto_List(request):
 	ponto = ponto.order_by('dia','hora')
 	
 	try:
-	    paramponto = ParamPonto.objects.get(usuario=request.user)
+		paramponto = ParamPonto.objects.get(usuario=request.user)
 	except ParamPonto.DoesNotExist:
-	    paramponto = None
+		paramponto = None
 	if not paramponto:
 		paramponto = ParamPonto.objects.create(usuario=request.user,
 								  entrada="07:30",
@@ -71,9 +66,7 @@ def Ponto_List(request):
 			elif v_saida_l > timedelta(hours=i.hora.hour,minutes=i.hora.minute):
 				i.banco = timedelta(hours=paramponto.saida.hour,minutes=paramponto.saida.minute) - timedelta(hours=i.hora.hour,minutes=i.hora.minute) 
 				i.cor = "red"		
-				i.exc = True		
-
-	#import pdb; pdb.set_trace()
+				i.exc = True
 
 	args = {'ponto': ponto,
 			'periodo':periodo,
@@ -106,7 +99,7 @@ def Ponto_Add(request):
 
 @permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_View(request,pk):	
-	ponto = get_object_or_404(Ponto, pk=pk)  	
+	ponto = get_object_or_404(Ponto, pk=pk)
 	if ponto.usuario != request.user:
 		messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
 		return redirect('ponto:ponto_list')
@@ -139,20 +132,20 @@ def Ponto_Edit(request,pk):
 
 @permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def Ponto_Del(request):
-    if request.POST and request.is_ajax():        
-        if request.POST.getlist('ponto_lista[]'):
-            ponto_list = request.POST.getlist('ponto_lista[]')            
-            for i in ponto_list:
-                ponto = Ponto.objects.get(pk=i)
-                if ponto.usuario != request.user:
-                    messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-                    return redirect('ponto:ponto_list')
-                ponto.delete()            
-            messages.success(request, "Ponto excluido com sucesso.", extra_tags='alert-success alert-dismissible')            
-        else:
-            messages.error(request, "Nenhum ponto selecionado.", extra_tags='alert-error alert-dismissible')               
+	if request.POST and request.is_ajax():
+		if request.POST.getlist('ponto_lista[]'):
+			ponto_list = request.POST.getlist('ponto_lista[]')
+			for i in ponto_list:
+				ponto = Ponto.objects.get(pk=i)
+				if ponto.usuario != request.user:
+					messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')
+					return redirect('ponto:ponto_list')
+				ponto.delete()
+			messages.success(request, "Ponto excluido com sucesso.", extra_tags='alert-success alert-dismissible')
+		else:
+			messages.error(request, "Nenhum ponto selecionado.", extra_tags='alert-error alert-dismissible')
 
-    return HttpResponse('')
+	return HttpResponse('')
 
 @permission_required('ponto.acesso_app_ponto', raise_exception=True)
 def ParamPonto_Edit(request):

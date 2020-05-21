@@ -69,10 +69,6 @@ class RegisterProfileForm(UserCreationForm):
 		return email
 
 class ProfileForm(forms.ModelForm):
-	"""foto_perfil = RestrictedFileField(content_types=['image/jpeg','image/png', 'application/pdf'],
-									  max_upload_size=1600000, 
-									  required=False,									  
-									  help_text='Arquivos válidos: jpg, png, pdf. Tamanho máximo: 1.5mb')"""
 	class Meta:
 		model = Profile
 		fields = (			
@@ -82,22 +78,22 @@ class ProfileForm(forms.ModelForm):
 			'layoutskin',
 			'descricao')
 		widgets = {
-            'dt_nascimento': TextInput(attrs={'type': 'date'}),
-        }
+			'dt_nascimento': TextInput(attrs={'type': 'date'}),
+		}
 
 class MensagemFormView(forms.ModelForm):
-    class Meta:
-        model = Mensagem
-        fields = ('remetente',
-        		  'assunto', 
-        		  'mensagem',
-        		  'dt_mensagem' 		  
-        		  )
+	class Meta:
+		model = Mensagem
+		fields = ('remetente',
+				  'assunto',
+				  'mensagem',
+				  'dt_mensagem'
+				  )
 
 class NewMessage(forms.ModelForm):
-    class Meta:
-        model = Mensagem
-        fields = ('destinatario',
-        		  'assunto', 
-        		  'mensagem',        		  
-        		  )
+	class Meta:
+		model = Mensagem
+		fields = ('destinatario',
+				  'assunto',
+				  'mensagem',
+				  )

@@ -10,26 +10,20 @@ from .forms import (
 	CategoriaFormView,
 	ContaFormView,
 	)
-from django.utils import timezone
 from django.contrib import messages
-from django.core import serializers
 from .despesa import (
 	AlteraDespesasPend,
 	BuscaDespesasMes,
 	EliminaDespesa,
-	EditaDespesa,
 	AdicionaDespesa,
 	GeraExcel
 	)
 from mysite.decorators import user_financ
 import datetime
-import calendar
 import json
-#import time
 
 #import pdb; pdb.set_trace()
 
-# Create your views here.
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
@@ -75,8 +69,8 @@ def Despesa_Add(request):
 
 	if request.method == 'POST':
 		p_fixa    = bool(request.POST.get('id_repetir'))
-		
 		p_qtd_meses = request.POST.get('id_meses')
+
 		if p_qtd_meses != '':
 			qtd_meses = int(p_qtd_meses)
 			if qtd_meses > 99:
@@ -131,11 +125,6 @@ def Despesa_View(request,pk):
 @user_financ
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Edit(request,pk):
-	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
-	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	p_fixa   = int(request.GET.get('fixa', 0))	
-	url      = '?year=' + str(p_ano) + '&month=' + str(p_mes)
-
 	despesa = get_object_or_404(Despesa, pk=pk)
 
 	if request.method == 'POST':
@@ -164,12 +153,7 @@ def Despesa_Edit(request,pk):
 @user_financ
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Edit_All(request,pk):
-	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
-	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	p_fixa   = int(request.GET.get('fixa', 0))	
-	url      = '?year=' + str(p_ano) + '&month=' + str(p_mes)
-
-	despesa = get_object_or_404(Despesa, pk=pk)	
+	despesa = get_object_or_404(Despesa, pk=pk)
 
 	if request.method == 'POST':
 		form = DespesaFormView(request.POST, instance=despesa)        
@@ -198,26 +182,12 @@ def Despesa_Edit_All(request,pk):
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Del(request):
-	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
-	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	p_fixa   = int(request.GET.get('fixa', 0))	
-
-	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
-	
-	EliminaDespesa(request,1)            
-
+	EliminaDespesa(request,1)
 	return HttpResponse('')	
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesa_Del_All(request):
-	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
-	p_mes    = int(request.GET.get('month', datetime.datetime.today().month))	
-	p_fixa   = int(request.GET.get('fixa', 0))	
-
-	url = '?year=' + str(p_ano) + '&month=' + str(p_mes)
-
 	EliminaDespesa(request,2)
-	
 	return HttpResponse('')	
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
@@ -283,7 +253,7 @@ def Categoria_Edit(request, pk):
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
-		form = CategoriaFormView(instance=categoria)        
+		form = CategoriaFormView(instance=categoria)
 
 	args = {'form': form}    
 
@@ -291,20 +261,19 @@ def Categoria_Edit(request, pk):
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Categoria_Del(request):
-    if request.POST and request.is_ajax():        
-        if request.POST.getlist('categoria_lista[]'):
-            categoria_list = request.POST.getlist('categoria_lista[]')            
-            for i in categoria_list:
-                categoria = Categoria.objects.get(pk=i)
-                if categoria.usuario != request.user:
-                    messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-                    return redirect('financ:categoria_list')
-                categoria.delete()            
-            messages.success(request, "Mensagens excluidas com sucesso.", extra_tags='alert-success alert-dismissible')            
-        else:
-            messages.error(request, "Nenhuma mensagem selecionada.", extra_tags='alert-error alert-dismissible')               
-
-    return HttpResponse('')
+	if request.POST and request.is_ajax():
+		if request.POST.getlist('categoria_lista[]'):
+			categoria_list = request.POST.getlist('categoria_lista[]')
+			for i in categoria_list:
+				categoria = Categoria.objects.get(pk=i)
+				if categoria.usuario != request.user:
+					messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')
+					return redirect('financ:categoria_list')
+				categoria.delete()
+			messages.success(request, "Mensagens excluidas com sucesso.", extra_tags='alert-success alert-dismissible')
+		else:
+			messages.error(request, "Nenhuma mensagem selecionada.", extra_tags='alert-error alert-dismissible')
+	return HttpResponse('')
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Conta_Add(request):	
@@ -362,20 +331,19 @@ def Conta_Edit(request, pk):
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Conta_Del(request):
-    if request.POST and request.is_ajax():        
-        if request.POST.getlist('conta_lista[]'):
-            conta_list = request.POST.getlist('conta_lista[]')            
-            for i in conta_list:
-                conta = Conta.objects.get(pk=i)
-                if conta.usuario != request.user:
-                    messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')			
-                    return redirect('financ:conta_list')
-                conta.delete()            
-            messages.success(request, "Conta excluida com sucesso.", extra_tags='alert-success alert-dismissible')            
-        else:
-            messages.error(request, "Nenhuma conta selecionada.", extra_tags='alert-error alert-dismissible')               
-
-    return HttpResponse('')
+	if request.POST and request.is_ajax():
+		if request.POST.getlist('conta_lista[]'):
+			conta_list = request.POST.getlist('conta_lista[]')
+			for i in conta_list:
+				conta = Conta.objects.get(pk=i)
+				if conta.usuario != request.user:
+					messages.error(request, "Acesso negado!", extra_tags='alert-error alert-dismissible')
+					return redirect('financ:conta_list')
+				conta.delete()
+			messages.success(request, "Conta excluida com sucesso.", extra_tags='alert-success alert-dismissible')
+		else:
+			messages.error(request, "Nenhuma conta selecionada.", extra_tags='alert-error alert-dismissible')
+	return HttpResponse('')
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Gera_XLS_Mes(request):
