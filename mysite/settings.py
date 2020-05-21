@@ -34,25 +34,27 @@ else:
 
 
 ALLOWED_HOSTS = ['kaiserz.pythonanywhere.com',
-                 '127.0.0.1'
-                ]
+                 '127.0.0.1',
+                 'localhost']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'app.apps.AppConfig',
-    'financ.apps.FinancConfig',
-    'ponto.apps.PontoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'app.apps.AppConfig',
+    'financ.apps.FinancConfig',
+    'ponto.apps.PontoConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -132,9 +134,11 @@ USE_THOUSAND_SEPARATOR = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = '/media/'
 
