@@ -2,7 +2,6 @@ from .models import Mensagem
 from django.contrib.auth.models import User
 
 def base_html(request):
-	#import pdb; pdb.set_trace()
 	args = {}
 	
 	if request.user.username != '':	

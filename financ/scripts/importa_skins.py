@@ -35,5 +35,5 @@ if acao == '1':
 		for i in skins:	    
 			print(i.descricao)
 			arquivo.writerow([i.descricao,i.nome_css])
-	    
+
 	print('------------------------------')

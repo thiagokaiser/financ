@@ -22,8 +22,6 @@ from mysite.decorators import user_financ
 import datetime
 import json
 
-#import pdb; pdb.set_trace()
-
 @permission_required('financ.acesso_app_financ', raise_exception=True)
 def Despesas(request):
 	p_ano    = int(request.GET.get('year', datetime.datetime.today().year))
@@ -54,8 +52,8 @@ def Despesas(request):
 	despesas, totais = BuscaDespesasMes(request,current.year,current.month)
 
 	args = {'mes': mes,
-	 		'despesas': despesas,
-	 		'totais': totais}
+			'despesas': despesas,
+			'totais': totais}
 
 	return render(request, 'financ/despesas.html', args)
 
@@ -85,10 +83,10 @@ def Despesa_Add(request):
 			url = '?year=' + str(despesa.dt_vencimento.year) + '&month=' + str(despesa.dt_vencimento.month)
 			despesa.fixa = p_fixa
 			despesa.usuario = request.user						
-			if despesa.fixa == True:				
+			if despesa.fixa:
 				despesa.parcela = '1/' + str(qtd_meses)
 			despesa.save()       			   
-			if despesa.fixa == True:
+			if despesa.fixa:
 				AdicionaDespesa(despesa,qtd_meses)  
 				
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
@@ -248,15 +246,13 @@ def Categoria_Edit(request, pk):
 		if form.is_valid():  			
 			form.save()            
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
-			
 			return redirect('financ:categoria_list')
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
 		form = CategoriaFormView(instance=categoria)
 
-	args = {'form': form}    
-
+	args = {'form': form}
 	return render(request, 'financ/categoria_edit.html', args)
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
@@ -283,7 +279,11 @@ def Conta_Add(request):
 			conta = form.save(commit=False)           	
 			conta.usuario = request.user
 			conta.save()
+			messages.success(request, "Conta adicionada com sucesso.", extra_tags='alert-success alert-dismissible')
 			return redirect('financ:conta_list')
+		else:
+			messages.error(request, "Foram preenchidos dados incorretamente.",
+						   extra_tags='alert-error alert-dismissible')
 	else:
 		form = ContaFormView()
 
@@ -318,15 +318,13 @@ def Conta_Edit(request, pk):
 		if form.is_valid():  			
 			form.save()            
 			messages.success(request, "Informações atualizadas com sucesso.", extra_tags='alert-success alert-dismissible')
-			
 			return redirect('financ:conta_list')
 		else:
 			messages.error(request, "Foram preenchidos dados incorretamente.", extra_tags='alert-error alert-dismissible')               
 	else:
 		form = ContaFormView(instance=conta)        
 
-	args = {'form': form}    
-
+	args = {'form': form}
 	return render(request, 'financ/conta_edit.html', args)
 
 @permission_required('financ.acesso_app_financ', raise_exception=True)
@@ -358,13 +356,10 @@ def Gera_XLS_Mes(request):
 		return redirect('financ:despesas')	
 
 	despesas = Despesa.objects.filter(dt_vencimento__gte=data_ini,
-                                      dt_vencimento__lte=data_fim,
-                                      usuario=request.user)
-
-	#time.sleep(3)
+									  dt_vencimento__lte=data_fim,
+									  usuario=request.user)
 
 	response = HttpResponse(content_type='application/vnd.ms-excel')
-	#response['Set-Cookie'] = "fileDownload=true; path=/"
 	response['Content-Disposition'] = 'attachment; filename=despesas' + str(data_ini.date()) + "to" + str(data_fim.date()) + '.xlsx'
 
 	xlsx_data = GeraExcel(despesas)

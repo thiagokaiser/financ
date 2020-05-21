@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import Despesa, Categoria, Importacao, Conta
 
 admin.site.register(Despesa)

@@ -114,7 +114,6 @@ def BuscaDespesasMes(request,ano,mes):
 			  'pendente': float(pendente['valor__sum'] or 0),
 			  'total': total}
 
-
 	return despesas, totais
 
 def EliminaDespesa(request, param):
@@ -137,7 +136,6 @@ def EliminaDespesa(request, param):
 		else:
 			messages.error(request, "Nenhuma despesa selecionada.", extra_tags='alert-error alert-dismissible')   
 
-
 def AdicionaDespesa(despesa,qtd_meses):
 	despesa_pai = Despesa.objects.filter(pk=despesa.pk)
 	despesa_pai.update(pk_fixa = despesa.pk)
@@ -153,7 +151,7 @@ def AdicionaDespesa(despesa,qtd_meses):
 			dt_vencimento = datetime.datetime(dt_vencimento.year, dt_vencimento.month + 1, dt_vencimento.day) 
 
 		Despesa.objects.create(valor		  = despesa.valor,
-                               descricao	  = despesa.descricao,
+							   descricao	  = despesa.descricao,
 							   dt_vencimento  = dt_vencimento,
 							   categoria	  = despesa.categoria,
 							   pago		      = False,
