@@ -24,7 +24,7 @@ if socket.gethostname() == 'DESKTOP-MD82F1I':
 	SECURE_SSL_REDIRECT = False
 	SESSION_COOKIE_SECURE = False
 	CSRF_COOKIE_SECURE = False
-	DEBUG = False
+	DEBUG = True
 else:
 	SECURE_SSL_REDIRECT = True
 	SESSION_COOKIE_SECURE = True

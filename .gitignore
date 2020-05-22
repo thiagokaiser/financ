@@ -9,3 +9,8 @@ mysite/settings_passwords.py
 media
 .vs/
 staticfiles
+*.sln
+*.pyproj
+*.pyproj.user
+bin
+obj
